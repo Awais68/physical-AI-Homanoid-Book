@@ -93,10 +93,6 @@ const config: Config = {
                             label: 'Getting Started',
                             to: '/docs/intro',
                         },
-                        {
-                            label: 'Book Index',
-                            to: '/docs/index',
-                        },
                     ],
                 },
                 {
