@@ -1,171 +1,30 @@
 /**
- * Visual Style Guidelines for Physical AI & Humanoid Robotics in Education
- *
- * Color Palette:
- * - Primary: Robotics Blue (#1a73e8) - represents technology and innovation
- * - Secondary: Education Green (#0f9d58) - represents learning and growth
- * - Accent: Warning Orange (#f4b400) - for important notices
- * - Alert: Error Red (#d93025) - for critical information
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
  */
 
-/* Main color scheme for educational robotics */
+/* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #1a73e8;          /* Robotics Blue */
-  --ifm-color-primary-dark: #1557b0;     /* Darker Robotics Blue */
-  --ifm-color-primary-darker: #0f4081;   /* Even Darker Robotics Blue */
-  --ifm-color-primary-darkest: #092a52;  /* Darkest Robotics Blue */
-  --ifm-color-primary-light: #3b8cff;    /* Lighter Robotics Blue */
-  --ifm-color-primary-lighter: #6ea2ff;  /* Even Lighter Robotics Blue */
-  --ifm-color-primary-lightest: #a0c4ff; /* Lightest Robotics Blue */
-
-  --ifm-color-secondary: #0f9d58;        /* Education Green */
-  --ifm-color-secondary-dark: #0b7f44;   /* Darker Education Green */
-  --ifm-color-secondary-darker: #086231; /* Even Darker Education Green */
-  --ifm-color-secondary-darkest: #05451e; /* Darkest Education Green */
-  --ifm-color-secondary-light: #34b972;  /* Lighter Education Green */
-  --ifm-color-secondary-lighter: #59d58c; /* Even Lighter Education Green */
-  --ifm-color-secondary-lightest: #80f1a6; /* Lightest Education Green */
-
-  --ifm-color-warning: #f4b400;          /* Warning Orange */
-  --ifm-color-error: #d93025;            /* Error Red */
-
+  --ifm-color-primary: #2e8555;
+  --ifm-color-primary-dark: #29784c;
+  --ifm-color-primary-darker: #277148;
+  --ifm-color-primary-darkest: #205d3b;
+  --ifm-color-primary-light: #33925d;
+  --ifm-color-primary-lighter: #359962;
+  --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-
-  /* Custom spacing for educational content */
-  --ifm-spacing-horizontal: 1.5rem;
-  --ifm-spacing-vertical: 1.5rem;
-
-  /* Typography */
-  --ifm-font-family-base: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
-  --ifm-font-size-base: 16px;
-  --ifm-line-height-base: 1.6;
 }
 
-/* Dark mode adjustments for better accessibility */
-[data-theme="dark"] {
-  --ifm-color-primary: #4285f4;
-  --ifm-color-primary-dark: #3367d6;
-  --ifm-color-primary-darker: #2a56b6;
-  --ifm-color-primary-darkest: #1f4399;
-  --ifm-color-primary-light: #5e9af7;
-  --ifm-color-primary-lighter: #7aaef9;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.1);
-
-  --ifm-color-secondary: #1aa36e;
-  --ifm-color-secondary-dark: #148056;
-  --ifm-color-secondary-darker: #0f6242;
-  --ifm-color-secondary-darkest: #0a452d;
-  --ifm-color-secondary-light: #34b972;
-  --ifm-color-secondary-lighter: #59d58c;
-}
-
-/* Custom components for educational content */
-.robotics-card {
-  border: 1px solid var(--ifm-color-primary-lighter);
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 1rem 0;
-  background-color: var(--ifm-color-emphasis-100);
-}
-
-.learning-objective {
-  background-color: var(--ifm-color-secondary-lightest);
-  border-left: 4px solid var(--ifm-color-secondary);
-  padding: 1rem;
-  margin: 1rem 0;
-  border-radius: 0 4px 4px 0;
-}
-
-.case-study {
-  background-color: var(--ifm-color-emphasis-100);
-  border: 1px solid var(--ifm-color-warning);
-  border-radius: 4px;
-  padding: 1rem;
-  margin: 1rem 0;
-}
-
-.summary-box {
-  background-color: var(--ifm-color-primary-lightest);
-  border: 1px solid var(--ifm-color-primary-lighter);
-  border-radius: 4px;
-  padding: 1rem;
-  margin: 1rem 0;
-  font-weight: 500;
-}
-
-/* Accessibility enhancements */
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-/* Focus indicators for keyboard navigation */
-button:focus,
-a:focus,
-input:focus,
-select:focus,
-textarea:focus,
-[tabindex]:focus {
-  outline: 2px solid var(--ifm-color-primary);
-  outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  :root {
-    --ifm-color-emphasis-300: #000;
-    --ifm-color-emphasis-700: #fff;
-  }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Typography enhancements for readability */
-.markdown h1,
-.markdown h2,
-.markdown h3,
-.markdown h4,
-.markdown h5,
-.markdown h6 {
-  font-weight: 600;
-}
-
-.markdown p {
-  margin-bottom: 1rem;
-  line-height: var(--ifm-line-height-base);
-}
-
-.markdown blockquote {
-  border-left: 4px solid var(--ifm-color-primary);
-  padding-left: 1rem;
-  margin: 1rem 0;
-  color: var(--ifm-color-emphasis-700);
-}
-
-.markdown code {
-  background-color: var(--ifm-color-emphasis-100);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.875em;
-}
-
-.markdown pre code {
-  background-color: transparent;
-  padding: 0;
-  border-radius: 0;
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  --ifm-color-primary: #25c2a0;
+  --ifm-color-primary-dark: #21af90;
+  --ifm-color-primary-darker: #1fa588;
+  --ifm-color-primary-darkest: #1a8870;
+  --ifm-color-primary-light: #29d5b0;
+  --ifm-color-primary-lighter: #32d8b4;
+  --ifm-color-primary-lightest: #4fddbf;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }

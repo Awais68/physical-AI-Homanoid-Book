@@ -1,40 +1,47 @@
 ---
-title: Introduction
+sidebar_position: 1
 ---
 
-# Welcome
+# Tutorial Intro
 
-Welcome to Physical AI & Humanoid Robotics in Education. This is your comprehensive guide to integrating advanced robotics into learning.
-
-## Learning Objectives
-
-After reading this book, you will be able to:
-
-- Understand the scope and boundaries of Physical AI and Humanoid Robotics in educational contexts
-- Identify and address key ethical dilemmas in educational robotics
-- Apply technical concepts to educational settings
-- Implement pedagogically sound approaches to using humanoid robots
-- Adapt implementations for different educational levels
-- Follow best practices for implementation in educational settings
-- Ensure compliance with data privacy and security requirements
+Let's discover **Docusaurus in less than 5 minutes**.
 
 ## Getting Started
 
-Get started by exploring our tutorials and documentation. We recommend beginning with the [Scope and Boundaries](./01-scope-boundaries.md) to understand the educational contexts covered in this book, then exploring [Ethical Dilemmas & Controversies](./02-ethical-dilemmas.md) to consider important ethical implications.
+Get started by **creating a new site**.
 
-## What you'll learn
+Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
 
-- Fundamentals of Physical AI
-- Humanoid Robotics concepts
-- Educational frameworks
-- Implementation strategies
+### What you'll need
 
-## Recommended Reading Path
+- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
+  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
 
-1. Start with [Scope and Boundaries](./01-scope-boundaries.md) to understand the educational contexts
-2. Explore [Ethical Dilemmas & Controversies](./02-ethical-dilemmas.md) to consider ethical implications
-3. Study [Technical Concepts](./03-technical-concepts.md) to understand the underlying technology
-4. Learn about [Pedagogical Approaches](./04-pedagogical-approaches.md) for effective implementation
-5. Review [Educational Level Considerations](./05-education-levels.md) for age-appropriate applications
-6. Follow [Implementation Guidance](./06-implementation-guidance.md) for practical deployment
-7. Ensure compliance with [Data Privacy and Security](./07-privacy-security.md) requirements
+## Generate a new site
+
+Generate a new Docusaurus site using the **classic template**.
+
+The classic template will automatically be added to your project after you run the command:
+
+```bash
+npm init docusaurus@latest my-website classic
+```
+
+You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+
+The command also installs all necessary dependencies you need to run Docusaurus.
+
+## Start your site
+
+Run the development server:
+
+```bash
+cd my-website
+npm run start
+```
+
+The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
+
+The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
+
+Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
