@@ -13,16 +13,50 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
  Create as many sidebars as you want.
  */
 const sidebars: SidebarsConfig = {
-  // By default, Docusaurus generates a sidebar from the docs folder structure
+  // Physical AI & Humanoid Robotics Book
   tutorialSidebar: [
+    'intro',
     {
       type: 'category',
-      label: 'AI Robotics Book',
+      label: 'Book Content',
       items: [
-        'ai-robotics/introduction',
-        'ai-robotics/planning',
-        'ai-robotics/chapter-1',
-        'ai-robotics/chapter-2',
+        '01-scope-boundaries',
+        '02-ethical-dilemmas',
+        '03-technical-concepts',
+        '04-pedagogical-approaches',
+        '05-education-levels',
+        '06-implementation-guidance',
+        '07-privacy-security',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Additional Resources',
+      items: [
+        'documentation-updates',
+        'update-procedures',
+        'versioning-strategy',
+        'accessibility-statement',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Tutorial Basics',
+      items: [
+        'tutorial-basics/create-a-document',
+        'tutorial-basics/create-a-page',
+        'tutorial-basics/create-a-blog-post',
+        'tutorial-basics/markdown-features',
+        'tutorial-basics/congratulations',
+        'tutorial-basics/deploy-your-site',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Tutorial Extras',
+      items: [
+        'tutorial-extras/manage-docs-versions',
+        'tutorial-extras/translate-your-site',
       ],
     },
   ],
