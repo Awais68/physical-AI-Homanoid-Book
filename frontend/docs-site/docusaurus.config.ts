@@ -22,11 +22,9 @@ const config: Config = {
     projectName: 'physical-ai-humanoid-robotics-book',
 
     onBrokenLinks: 'warn',
-    onBrokenMarkdownLinks: 'warn',
     markdown: {
         format: 'mdx',
         mermaid: true,
-        // Migrate deprecated option
         hooks: {
             onBrokenMarkdownLinks: 'warn',
         },

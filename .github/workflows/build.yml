@@ -39,7 +39,7 @@ jobs:
 
       - name: Run formatting check
         working-directory: frontend/docs-site
-        run: npm run format
+        run: npm run format:check
 
       - name: Build documentation
         working-directory: frontend/docs-site
