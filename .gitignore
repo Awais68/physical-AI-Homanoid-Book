@@ -1,0 +1,36 @@
+# Gitignore for Documentation Project
+
+# General
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+*.swp
+*.bak
+*.swo
+*~
+
+# IDE and Editor files
+.vscode/
+.idea/
+.project
+.classpath
+.settings/
+
+# Build artifacts (if any, for potential future documentation generation)
+/build/
+/dist/
+/out/
+*.pdf # if generating final output as PDF
+
+# Specify-related files
+.specify/memory/
+.specify/tmp/
+
+# History files
+/history/
+
+# Temp files
+/tmp/
+node_modules/
+.env*

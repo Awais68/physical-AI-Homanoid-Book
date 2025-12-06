@@ -208,3 +208,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- JavaScript (ES6+), Node.js (latest LTS) + Docusaurus 3.x, React, MDX (002-docusaurus-site-setup)
+- N/A (Static Site) (002-docusaurus-site-setup)
+
+## Recent Changes
+- 002-docusaurus-site-setup: Added JavaScript (ES6+), Node.js (latest LTS) + Docusaurus 3.x, React, MDX
