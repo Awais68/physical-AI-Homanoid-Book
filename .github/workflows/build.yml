@@ -1,0 +1,54 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+  pull_request:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "frontend/docs-site/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: frontend/docs-site
+        run: npm ci
+
+      - name: Run linting
+        working-directory: frontend/docs-site
+        run: npm run lint
+
+      - name: Run type checking
+        working-directory: frontend/docs-site
+        run: npm run typecheck
+
+      - name: Run formatting check
+        working-directory: frontend/docs-site
+        run: npm run format
+
+      - name: Build documentation
+        working-directory: frontend/docs-site
+        run: npm run build
+
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: frontend/docs-site/build/
+          retention-days: 30

@@ -1,0 +1,90 @@
+name: Code Quality & Security
+
+on:
+  push:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+  pull_request:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+  schedule:
+    - cron: "0 2 * * 0" # Weekly security check on Sunday
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      - name: Run npm audit
+        working-directory: frontend/docs-site
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run Dependabot
+        uses: dependabot/fetch-metadata@v1
+        if: github.event_name == 'pull_request'
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+        continue-on-error: true
+
+  dependency-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: "frontend/docs-site/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: frontend/docs-site
+        run: npm ci
+
+      - name: Check for outdated packages
+        working-directory: frontend/docs-site
+        run: npm outdated
+        continue-on-error: true
+
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: "frontend/docs-site/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: frontend/docs-site
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: frontend/docs-site
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Run Prettier check
+        working-directory: frontend/docs-site
+        run: npm run format -- --check
+        continue-on-error: true
+
+      - name: TypeScript type check
+        working-directory: frontend/docs-site
+        run: npm run typecheck
+        continue-on-error: true
