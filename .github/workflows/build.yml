@@ -49,6 +49,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
-          path: frontend/docs-site/build/
+          name: build-output
+          path: frontend/build/
           retention-days: 30
