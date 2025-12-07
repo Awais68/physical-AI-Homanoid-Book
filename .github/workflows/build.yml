@@ -23,26 +23,26 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-          cache-dependency-path: "frontend/docs-site/package-lock.json"
+          cache-dependency-path: "frontend/package-lock.json"
 
       - name: Install dependencies
-        working-directory: frontend/docs-site
+        working-directory: frontend
         run: npm ci
 
       - name: Run linting
-        working-directory: frontend/docs-site
+        working-directory: frontend
         run: npm run lint
 
       - name: Run type checking
-        working-directory: frontend/docs-site
+        working-directory: frontend
         run: npm run typecheck
 
       - name: Run formatting check
-        working-directory: frontend/docs-site
+        working-directory: frontend
         run: npm run format:check
 
       - name: Build documentation
-        working-directory: frontend/docs-site
+        working-directory: frontend
         run: npm run build
 
       - name: Upload build artifacts
