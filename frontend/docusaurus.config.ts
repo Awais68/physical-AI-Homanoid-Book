@@ -15,15 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://Awais68.github.io',
+  url: 'https://awais68.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/physical-AI-Homanoid-Book/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'your-github-org', // Usually your GitHub org/user name.
-  projectName: 'physical-ai-robotics-book', // Usually your repo name.
+  organizationName: 'Awais68', // Usually your GitHub org/user name.
+  projectName: 'physical-AI-Homanoid-Book', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +44,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/your-github-org/physical-ai-robotics-book/tree/main/',
+            'https://github.com/Awais68/physical-AI-Homanoid-Book/tree/main/frontend/',
         },
         blog: {
           showReadingTime: true,
@@ -55,7 +55,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/your-github-org/physical-ai-robotics-book/tree/main/',
+            'https://github.com/Awais68/physical-AI-Homanoid-Book/tree/main/frontend/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -89,7 +89,7 @@ const config: Config = {
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/Awais68/physical-AI-Homanoid-Book',
           label: 'GitHub',
           position: 'right',
         },
@@ -99,46 +99,54 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Getting Started',
               to: '/docs/intro',
             },
+            {
+              label: 'Scope & Boundaries',
+              to: '/docs/01-scope-boundaries',
+            },
+            {
+              label: 'Ethical Framework',
+              to: '/docs/02-ethical-dilemmas',
+            },
           ],
         },
         {
-          title: 'Community',
+          title: 'Resources',
           items: [
             {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              label: 'Technical Concepts',
+              to: '/docs/03-technical-concepts',
             },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: 'Pedagogical Approaches',
+              to: '/docs/04-pedagogical-approaches',
             },
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Implementation Guide',
+              to: '/docs/06-implementation-guidance',
             },
           ],
         },
         {
-          title: 'More',
+          title: 'Connect',
           items: [
             {
               label: 'Blog',
               to: '/blog',
             },
             {
-              label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              label: 'GitHub Repository',
+              href: 'https://github.com/Awais68/physical-AI-Homanoid-Book',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Robotics, Inc. Built By AS Developers with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics in Education. Built with ❤️ by AS Developers using Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

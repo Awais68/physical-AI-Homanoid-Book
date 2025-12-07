@@ -1,30 +1,209 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Custom CSS for Physical AI & Humanoid Robotics Documentation
+ * Infima CSS framework with modern, professional styling
  */
 
-/* You can override the default Infima variables here. */
+/* ==================== Color Palette ==================== */
 :root {
-  --ifm-color-primary: #4fc3f7;
-  --ifm-color-primary-dark: #03a9f4;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  /* Primary colors - Modern blue gradient */
+  --ifm-color-primary: #2196f3;
+  --ifm-color-primary-dark: #1976d2;
+  --ifm-color-primary-darker: #1565c0;
+  --ifm-color-primary-darkest: #0d47a1;
+  --ifm-color-primary-light: #42a5f5;
+  --ifm-color-primary-lighter: #64b5f6;
+  --ifm-color-primary-lightest: #90caf9;
+
+  /* Typography */
+  --ifm-font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-size-base: 16px;
+  --ifm-line-height-base: 1.65;
+  --ifm-heading-font-weight: 600;
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Spacing */
+  --ifm-spacing-horizontal: 1.5rem;
+  --ifm-navbar-height: 60px;
+
+  /* Effects */
+  --ifm-global-shadow-lw: 0 1px 3px rgba(0, 0, 0, 0.12);
+  --ifm-global-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: rgba(33, 150, 243, 0.1);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* Dark mode colors */
 [data-theme='dark'] {
-  --ifm-color-primary: #8ed1fc;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: #b8e986;
+  --ifm-color-primary: #64b5f6;
+  --ifm-color-primary-dark: #42a5f5;
+  --ifm-color-primary-darker: #2196f3;
+  --ifm-color-primary-darkest: #1976d2;
+  --ifm-color-primary-light: #90caf9;
+  --ifm-color-primary-lighter: #bbdefb;
+  --ifm-color-primary-lightest: #e3f2fd;
+  --docusaurus-highlighted-code-line-bg: rgba(100, 181, 246, 0.15);
+  --ifm-background-color: #1a1a1a;
+  --ifm-background-surface-color: #242424;
+}
+
+/* ==================== Typography Enhancements ==================== */
+.markdown h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-light) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.markdown h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--ifm-color-primary-lightest);
+  padding-bottom: 0.5rem;
+}
+
+.markdown h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  color: var(--ifm-color-primary-dark);
+}
+
+/* ==================== Navbar Styling ==================== */
+.navbar {
+  box-shadow: var(--ifm-global-shadow-md);
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar__title {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* ==================== Content Cards ==================== */
+.card {
+  border-radius: 12px;
+  box-shadow: var(--ifm-global-shadow-md);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ==================== Code Blocks ==================== */
+pre {
+  border-radius: 8px;
+  box-shadow: var(--ifm-global-shadow-lw);
+}
+
+code {
+  border-radius: 4px;
+  padding: 0.2em 0.4em;
+  background-color: rgba(33, 150, 243, 0.1);
+}
+
+/* ==================== Sidebar ==================== */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.menu__link--active {
+  font-weight: 600;
+  background: linear-gradient(
+    90deg,
+    var(--ifm-color-primary-lightest) 0%,
+    transparent 100%
+  );
+}
+
+/* ==================== Footer ==================== */
+.footer {
+  background: linear-gradient(
+    180deg,
+    var(--ifm-background-color) 0%,
+    var(--ifm-color-primary-darkest) 100%
+  );
+  padding: 3rem 0;
+}
+
+.footer__title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* ==================== Buttons & Links ==================== */
+.button {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+/* ==================== Homepage Hero ==================== */
+.hero {
+  background: linear-gradient(
+    135deg,
+    var(--ifm-color-primary) 0%,
+    var(--ifm-color-primary-dark) 100%
+  );
+  padding: 4rem 0;
+}
+
+.hero__title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+}
+
+.hero__subtitle {
+  font-size: 1.5rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 996px) {
+  .hero__title {
+    font-size: 2rem;
+  }
+
+  .hero__subtitle {
+    font-size: 1.2rem;
+  }
+
+  .markdown h1 {
+    font-size: 2rem;
+  }
+}
+
+/* ==================== Accessibility ==================== */
+:focus-visible {
+  outline: 3px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* ==================== Custom Components ==================== */
+.admonition {
+  border-radius: 8px;
+  box-shadow: var(--ifm-global-shadow-lw);
+}
+
+.badge {
+  border-radius: 12px;
+  padding: 0.25em 0.6em;
+  font-weight: 600;
 }
