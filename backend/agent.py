@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from agents import enable_verbose_stdout_logging
 import cohere
 from qdrant_client import QdrantClient
+import os
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
 
 # Initialize Cohere client
 cohere_client = cohere.Client("8tK6O5xlVMGGgfFY3zG8koo4sTHE1rDSLhR3PUtH")
@@ -13,7 +16,7 @@ cohere_client = cohere.Client("8tK6O5xlVMGGgfFY3zG8koo4sTHE1rDSLhR3PUtH")
 # Connect to Qdrant
 qdrant = QdrantClient(
     url="https://d781f662-2044-4110-a0aa-9f08549ea800.us-east4-0.gcp.cloud.qdrant.io",
-    api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.BLhwxVqLVogzWmFWN3d6REjaZTaVmA1i7EniMI_82xM",
+    api_key="QDRANT_API_KEY",
     timeout=60,  # Increase timeout
 )
 
