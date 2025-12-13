@@ -1,0 +1,529 @@
+# OpenAPI Contract: Physical AI Edge Kit with RAG Chatbot
+
+openapi: 3.0.0
+info:
+  title: Physical AI Edge Kit API with RAG Chatbot
+  description: API for managing physical AI devices, educational robotics, and RAG chatbot functionality in educational environments
+  version: 1.0.0
+
+paths:
+  /api/devices:
+    get:
+      summary: List all connected physical AI devices
+      responses:
+        '200':
+          description: List of connected devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EdgeDevice'
+    post:
+      summary: Register a new physical AI device
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeDevice'
+      responses:
+        '201':
+          description: Device registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeDevice'
+
+  /api/devices/{deviceId}:
+    get:
+      summary: Get details of a specific device
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Device details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeDevice'
+    put:
+      summary: Update device information
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeDevice'
+      responses:
+        '200':
+          description: Device updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeDevice'
+    delete:
+      summary: Remove a device from the system
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Device removed successfully
+
+  /api/safety/monitor:
+    get:
+      summary: Get current safety monitoring status
+      responses:
+        '200':
+          description: Safety monitoring status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafetyMonitor'
+    put:
+      summary: Update safety monitoring configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetyMonitor'
+      responses:
+        '200':
+          description: Safety monitor updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafetyMonitor'
+
+  /api/sessions:
+    get:
+      summary: List all learning sessions
+      responses:
+        '200':
+          description: List of learning sessions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LearningSession'
+    post:
+      summary: Create a new learning session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningSession'
+      responses:
+        '201':
+          description: Learning session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningSession'
+
+  /api/sessions/{sessionId}:
+    get:
+      summary: Get details of a specific learning session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Learning session details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningSession'
+    put:
+      summary: Update a learning session
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningSession'
+      responses:
+        '200':
+          description: Learning session updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningSession'
+
+  /api/users/{userId}/profile:
+    get:
+      summary: Get user profile
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+
+  /api/chat/sessions:
+    post:
+      summary: Create a new chat session with the RAG chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatSession'
+      responses:
+        '201':
+          description: Chat session created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatSession'
+
+  /api/chat/sessions/{sessionId}/messages:
+    post:
+      summary: Send a message to the RAG chatbot
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatMessage'
+      responses:
+        '200':
+          description: Response from the RAG chatbot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+
+  /api/chat/query-selected-text:
+    post:
+      summary: Query the RAG chatbot specifically about selected text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelectedTextQuery'
+      responses:
+        '200':
+          description: Response based on selected text
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+
+  /api/users/{userId}/bookmarks:
+    get:
+      summary: Get user's bookmarks
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of user bookmarks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Bookmark'
+    post:
+      summary: Create a new bookmark
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Bookmark'
+      responses:
+        '201':
+          description: Bookmark created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bookmark'
+
+  /api/users/{userId}/preferences:
+    get:
+      summary: Get user preferences
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User preferences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreference'
+    put:
+      summary: Update user preferences
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreference'
+      responses:
+        '200':
+          description: User preferences updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreference'
+
+components:
+  schemas:
+    EdgeDevice:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        status:
+          type: string
+          enum: [online, offline, error, maintenance]
+        connectionInfo:
+          type: object
+        safetyParameters:
+          type: object
+        lastSeen:
+          type: string
+          format: date-time
+        capabilities:
+          type: array
+          items:
+            type: string
+
+    SafetyMonitor:
+      type: object
+      properties:
+        id:
+          type: string
+        activeRules:
+          type: array
+          items:
+            type: string
+        alertThresholds:
+          type: object
+        emergencyProcedures:
+          type: object
+        monitoringStatus:
+          type: string
+          enum: [active, paused, error]
+        lastAlert:
+          type: string
+          format: date-time
+        safetyMetrics:
+          type: object
+
+    LearningSession:
+      type: object
+      properties:
+        id:
+          type: string
+        participants:
+          type: array
+          items:
+            type: string
+        educatorId:
+          type: string
+        deviceIds:
+          type: array
+          items:
+            type: string
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        activities:
+          type: array
+          items:
+            type: object
+        safetyData:
+          type: object
+        learningOutcomes:
+          type: object
+
+    StudentProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+        safetyTraining:
+          type: object
+        learningProgress:
+          type: object
+        interactionHistory:
+          type: array
+          items:
+            type: object
+
+    ChatSession:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        conversationHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+        context:
+          type: object
+        sourceCitations:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    ChatResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        sourceCitations:
+          type: array
+          items:
+            type: string
+        contextUsed:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    SelectedTextQuery:
+      type: object
+      properties:
+        userId:
+          type: string
+        selectedText:
+          type: string
+        query:
+          type: string
+        context:
+          type: object
+
+    Bookmark:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        contentReference:
+          type: string
+        title:
+          type: string
+        notes:
+          type: string
+        location:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+
+    UserPreference:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        language:
+          type: string
+        personalizationSettings:
+          type: object
+        interfaceConfig:
+          type: object
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time

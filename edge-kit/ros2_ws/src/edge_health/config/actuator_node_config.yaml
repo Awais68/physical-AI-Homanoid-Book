@@ -1,0 +1,50 @@
+# Actuator Node Configuration
+# Optimized for actuator control with emphasis on safety and response time
+
+node_name: "actuator_node_monitor"
+publish_frequency: 0.5  # More frequent monitoring for safety-critical actuators
+
+# Thresholds configuration for actuator node (more sensitive for safety)
+thresholds:
+  cpu:
+    warning: 70.0      # Percentage (actuators need responsive CPU)
+    critical: 85.0     # Percentage
+  memory:
+    warning: 75.0      # Percentage
+    critical: 90.0     # Percentage
+  disk:
+    warning: 75.0      # Percentage
+    critical: 95.0     # Percentage
+  temperature:
+    warning: 65.0      # Celsius (actuators may generate heat)
+    critical: 75.0     # Celsius
+
+# Metrics to monitor
+enabled_metrics:
+  - cpu
+  - memory
+  - disk
+  - temperature
+  - power_draw  # Actuator-specific metric (if available)
+
+# Logging configuration
+log_level: "INFO"  # More detailed logging for safety-critical systems
+
+# Hardware-specific settings for actuator node
+hardware_specific:
+  safety_critical: true
+  enable_motor_current_monitoring: true
+  enable_servo_feedback_monitoring: true
+  emergency_stop_monitoring: true
+
+# Alert configuration (more sensitive for safety)
+alert_recipients:
+  - "operator_console"
+  - "dashboard_service"
+  - "safety_system"
+  - "emergency_procedures"
+
+# Actuator-specific settings
+actuator_settings:
+  max_current_draw: 10.0  # Amps
+  thermal_protection_enabled: true

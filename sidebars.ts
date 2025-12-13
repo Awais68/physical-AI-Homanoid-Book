@@ -23,6 +23,7 @@ const sidebars: SidebarsConfig = {
         'ai-robotics/planning',
         'ai-robotics/chapter-1',
         'ai-robotics/chapter-2',
+        'edge-kit'
       ],
     },
   ],

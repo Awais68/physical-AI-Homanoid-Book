@@ -103,7 +103,7 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/docs/intro',
+              to: '/docs/',
             },
             {
               label: 'Scope & Boundaries',
@@ -146,7 +146,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics in Education. Built with ❤️ by AS Developers using Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics in Education | Imagination Comes Into Reality With AS Developers`,
     },
     prism: {
       theme: prismThemes.github,

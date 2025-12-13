@@ -1,0 +1,88 @@
+# Docker ignore file for Physical AI Edge Kit
+
+# Git
+.git/
+.gitignore
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ROS2 build artifacts
+edge-kit/ros2_ws/build/
+edge-kit/ros2_ws/install/
+edge-kit/ros2_ws/log/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+
+# Build artifacts
+build/
+dist/
+out/
+
+# Documentation build
+frontend/build/
+frontend/node_modules/
+frontend/.docusaurus/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+!.env.example
+
+# Specify framework
+.specify/memory/
+.specify/tmp/
+
+# History (PHR records)
+history/
+
+# Specs (documentation only)
+specs/
+
+# Docker files (don't copy into image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+
+# Coverage
+coverage/
+
+# Test data
+edge-kit/data/

@@ -1,0 +1,8 @@
+# Request
+string reason
+string requested_by
+float64 timeout
+
+# Response
+bool success
+string message
