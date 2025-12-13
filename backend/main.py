@@ -5,6 +5,10 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import VectorParams, Distance, PointStruct
 import sys
 import time
+import os
+COHERE_API_KEY = os.getenv("COHERE_API_KEY")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+
 
 # Force unbuffered output
 sys.stdout.reconfigure(line_buffering=True)
@@ -16,7 +20,7 @@ sys.stdout.reconfigure(line_buffering=True)
 SITEMAP_URL = "https://awais68.github.io/physical-AI-Homanoid-Book/sitemap.xml"
 COLLECTION_NAME = "physical_ai_docs"
 
-COHERE_API_KEY = "8tK6O5xlVMGGgfFY3zG8koo4sTHE1rDSLhR3PUtH"
+COHERE_API_KEY = "COHERE_API_KEY"
 EMBED_MODEL = "embed-english-v3.0"
 
 # Connect to Qdrant Cloud
@@ -26,7 +30,7 @@ EMBED_MODEL = "embed-english-v3.0"
 
 qdrant = QdrantClient(
     url="https://d781f662-2044-4110-a0aa-9f08549ea800.us-east4-0.gcp.cloud.qdrant.io",
-    api_key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.BLhwxVqLVogzWmFWN3d6REjaZTaVmA1i7EniMI_82xM",
+    api_key="QDRANT_API_KEY",
     timeout=60,  # Increase timeout
 )
 
