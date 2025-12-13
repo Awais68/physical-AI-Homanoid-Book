@@ -15,7 +15,7 @@ import type { SidebarsConfig } from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   // Physical AI & Humanoid Robotics Book
   tutorialSidebar: [
-    'intro',
+    'index',
     {
       type: 'category',
       label: 'Book Content',
@@ -27,6 +27,14 @@ const sidebars: SidebarsConfig = {
         '05-education-levels',
         '06-implementation-guidance',
         '07-privacy-security',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Edge Kit',
+      items: [
+        'edge-kit',
+        '7day-report',
       ],
     },
     {

@@ -212,6 +212,14 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 ## Active Technologies
 - JavaScript (ES6+), Node.js (latest LTS) + Docusaurus 3.x, React, MDX (002-docusaurus-site-setup)
 - N/A (Static Site) (002-docusaurus-site-setup)
+- Python 3.11, JavaScript/TypeScript for frontend components, Docker containerization + FastAPI for backend APIs, React for frontend UI, Docker for containerization, Kubernetes for orchestration, PostgreSQL for data storage (004-physical-ai-edge-kit)
+- PostgreSQL database for structured data, file storage for educational content and logs (004-physical-ai-edge-kit)
+- Python 3.11 + BeautifulSoup4 for HTML parsing, Requests for HTTP requests, Cohere Python SDK for embeddings, Qdrant Python client for vector database operations, Pydantic for data validation (003-docusaurus-embeddings)
+- Qdrant Cloud vector database for embeddings storage, with local SQLite for job tracking and metadata (003-docusaurus-embeddings)
+- Python 3.11 for backend services, JavaScript/TypeScript for frontend components, with containerization using Docker + FastAPI for backend APIs, React for frontend UI, OpenAI SDK for RAG functionality, Qdrant for vector storage, Neon Postgres for user data, better-auth for authentication, LangChain for RAG orchestration, Docker for containerization (004-physical-ai-edge-kit)
+- Neon Serverless Postgres database for structured user data, Qdrant Cloud for vector storage of indexed documentation, file storage for educational content and logs (004-physical-ai-edge-kit)
+- Python 3.11 + rclpy (ROS2 Python client library), psutil (system monitoring), pyyaml (configuration) (001-physical-ai-monitoring)
+- Local file storage for logs, YAML configuration files (001-physical-ai-monitoring)
 
 ## Recent Changes
 - 002-docusaurus-site-setup: Added JavaScript (ES6+), Node.js (latest LTS) + Docusaurus 3.x, React, MDX
