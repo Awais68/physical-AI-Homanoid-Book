@@ -1,0 +1,41 @@
+# Sensor Node Configuration
+# Optimized for sensor monitoring with different power and thermal constraints
+
+node_name: "sensor_node_monitor"
+publish_frequency: 2.0  # Slightly less frequent for sensor nodes to conserve power
+
+# Thresholds configuration for sensor node
+thresholds:
+  cpu:
+    warning: 60.0      # Percentage (sensors typically use less CPU)
+    critical: 80.0     # Percentage
+  memory:
+    warning: 70.0      # Percentage
+    critical: 85.0     # Percentage
+  disk:
+    warning: 70.0      # Percentage
+    critical: 90.0     # Percentage
+  temperature:
+    warning: 60.0      # Celsius (sensors may operate in various environments)
+    critical: 75.0     # Celsius
+
+# Metrics to monitor (sensor-specific metrics may be added)
+enabled_metrics:
+  - cpu
+  - memory
+  - disk
+  - temperature
+
+# Logging configuration
+log_level: "WARNING"  # Reduced logging to conserve resources
+
+# Hardware-specific settings for sensor node
+hardware_specific:
+  power_sensitive: true
+  enable_wifi_monitoring: true
+  sensor_health_check: true
+
+# Alert configuration
+alert_recipients:
+  - "operator_console"
+  - "dashboard_service"

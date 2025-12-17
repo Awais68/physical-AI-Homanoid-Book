@@ -1,0 +1,62 @@
+# Gitignore for Documentation and Edge Kit Project
+
+# General
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+*.swp
+*.bak
+*.swo
+*~
+
+# IDE and Editor files
+.vscode/
+.idea/
+.project
+.classpath
+.settings/
+*.iml
+
+# Build artifacts
+/build/
+/dist/
+/out/
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+.eggs/
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# ROS2
+edge-kit/ros2_ws/build/
+edge-kit/ros2_ws/install/
+edge-kit/ros2_ws/log/
+*.bag
+
+# Specify-related files
+.specify/memory/
+.specify/tmp/
+
+# History files
+/history/
+
+# Temp files
+/tmp/
+node_modules/
+.env*

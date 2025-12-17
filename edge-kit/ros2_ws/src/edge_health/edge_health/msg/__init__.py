@@ -1,0 +1,1 @@
+"""Message definitions for the edge_health package."""

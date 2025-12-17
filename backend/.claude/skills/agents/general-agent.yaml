@@ -1,0 +1,24 @@
+name: general-agent
+description: A general-purpose agent for various automation and processing tasks
+skills:
+  - bash
+  - file-operations
+  - text-processing
+inputs:
+  task:
+    type: string
+    description: Description of the task to be performed
+    required: true
+  parameters:
+    type: object
+    description: Additional parameters for the task
+    required: false
+    default: {}
+outputs:
+  result: string
+  success: boolean
+  execution_time: string
+  errors: array
+behavior:
+  logging: true
+  error_handling: comprehensive

@@ -1,0 +1,11 @@
+# SafeShutdown service for Physical AI System Monitoring
+# Request to execute safe shutdown procedures
+
+# Request
+string reason
+string requested_by
+float64 timeout
+---
+# Response
+bool success
+string message

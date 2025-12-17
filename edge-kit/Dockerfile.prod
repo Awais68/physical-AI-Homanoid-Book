@@ -1,0 +1,86 @@
+# Production Dockerfile for Edge Health Monitoring System
+# Optimized for 7-day continuous operation
+
+FROM ros:humble-ros-base
+
+# Labels
+LABEL maintainer="Physical AI Edge Kit Team"
+LABEL version="1.0"
+LABEL description="Production ROS2 edge health monitoring system"
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV ROS_DISTRO=humble
+ENV PYTHONUNBUFFERED=1
+ENV EDGE_HEALTH_LOG_LEVEL=INFO
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-pip \
+    python3-colcon-common-extensions \
+    ros-humble-std-msgs \
+    ros-humble-builtin-interfaces \
+    ros-humble-launch \
+    ros-humble-launch-ros \
+    ros-humble-rmw-cyclonedds-cpp \
+    curl \
+    jq \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Install Python dependencies
+RUN pip3 install --no-cache-dir \
+    psutil \
+    pyyaml \
+    flask \
+    gunicorn \
+    requests
+
+# Create workspace directory
+WORKDIR /ros2_ws
+
+# Copy the packages
+COPY ros2_ws/src /ros2_ws/src
+
+# Create resource directory for ament index
+RUN mkdir -p /ros2_ws/src/edge_health/resource && \
+    touch /ros2_ws/src/edge_health/resource/edge_health
+
+# Build interfaces package first, then edge_health
+RUN /bin/bash -c "source /opt/ros/humble/setup.bash && \
+    cd /ros2_ws && \
+    colcon build --packages-select edge_health_interfaces && \
+    source install/setup.bash && \
+    colcon build --packages-select edge_health --symlink-install"
+
+# Create directories for persistent data
+RUN mkdir -p /ros2_ws/data/logs \
+    /ros2_ws/data/metrics \
+    /ros2_ws/data/alerts \
+    /ros2_ws/data/backups
+
+# Source the workspace in bashrc
+RUN echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc && \
+    echo "source /ros2_ws/install/setup.bash" >> ~/.bashrc && \
+    echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> ~/.bashrc
+
+# Copy production entrypoint
+COPY docker-entrypoint.prod.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Copy startup script
+COPY scripts/start_monitoring.sh /start_monitoring.sh
+RUN chmod +x /start_monitoring.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
+
+# Expose Flask API port
+EXPOSE 5000
+
+# Set the entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Default command - start all monitoring services
+CMD ["/start_monitoring.sh"]
