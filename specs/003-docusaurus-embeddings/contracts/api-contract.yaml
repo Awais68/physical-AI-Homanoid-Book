@@ -1,0 +1,204 @@
+# OpenAPI Contract: Docusaurus Embeddings Service
+
+openapi: 3.0.0
+info:
+  title: Docusaurus Embeddings Service API
+  description: API for managing Docusaurus documentation processing jobs and retrieving embeddings
+  version: 1.0.0
+
+paths:
+  /api/jobs:
+    post:
+      summary: Create a new processing job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessingJobRequest'
+      responses:
+        '201':
+          description: Processing job created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessingJob'
+    get:
+      summary: List all processing jobs
+      responses:
+        '200':
+          description: List of processing jobs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessingJob'
+
+  /api/jobs/{jobId}:
+    get:
+      summary: Get details of a specific processing job
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Processing job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessingJob'
+    patch:
+      summary: Update a processing job
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProcessingJobUpdate'
+      responses:
+        '200':
+          description: Processing job updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessingJob'
+
+  /api/search:
+    post:
+      summary: Perform semantic search on stored embeddings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+
+components:
+  schemas:
+    ProcessingJobRequest:
+      type: object
+      required:
+        - sourceUrl
+      properties:
+        sourceUrl:
+          type: string
+          description: URL of the Docusaurus site to process
+        config:
+          type: object
+          description: Configuration parameters for the processing job
+
+    ProcessingJob:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the processing job
+        sourceUrl:
+          type: string
+          description: Base URL of the Docusaurus site to process
+        status:
+          type: string
+          enum: [pending, in-progress, completed, failed]
+          description: Current status of the processing job
+        totalDocuments:
+          type: integer
+          description: Total number of documents to process
+        processedDocuments:
+          type: integer
+          description: Number of documents processed
+        failedDocuments:
+          type: integer
+          description: Number of documents that failed
+        startTime:
+          type: string
+          format: date-time
+          description: When the job started
+        endTime:
+          type: string
+          format: date-time
+          description: When the job completed or failed
+        errorDetails:
+          type: object
+          description: Details about any errors that occurred
+        config:
+          type: object
+          description: Configuration parameters for this job
+
+    ProcessingJobUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pending, in-progress, completed, failed]
+        processedDocuments:
+          type: integer
+        failedDocuments:
+          type: integer
+        errorDetails:
+          type: object
+
+    SearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: Search query text
+        limit:
+          type: integer
+          description: Maximum number of results to return
+          default: 10
+
+    SearchResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        query:
+          type: string
+          description: The original search query
+        executionTime:
+          type: number
+          description: Time taken to execute the search in milliseconds
+
+    SearchResult:
+      type: object
+      properties:
+        documentChunkId:
+          type: string
+          description: ID of the matching document chunk
+        sourceUrl:
+          type: string
+          description: URL of the original documentation page
+        title:
+          type: string
+          description: Title of the original documentation page
+        content:
+          type: string
+          description: Content snippet of the matching chunk
+        similarityScore:
+          type: number
+          description: Similarity score between 0 and 1
+        metadata:
+          type: object
+          description: Additional metadata about the match

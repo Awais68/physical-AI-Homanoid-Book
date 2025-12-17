@@ -1,0 +1,61 @@
+name: Documentation Checks
+
+on:
+  push:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+    paths:
+      - "frontend/docs/**"
+      - "frontend/sidebars.ts"
+      - ".github/workflows/documentation.yml"
+  pull_request:
+    branches: [main, develop, "001-ai-robotics-book-plan"]
+    paths:
+      - "frontend/docs/**"
+      - "frontend/sidebars.ts"
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: "npm"
+          cache-dependency-path: "frontend/package-lock.json"
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm install
+
+      - name: Build docs
+        working-directory: frontend
+        run: npm run build
+
+      - name: Check for broken links
+        working-directory: frontend
+        run: npm run build -- --out ./build
+        continue-on-error: true
+
+      - name: Validate sidebar structure
+        run: |
+          if [ -f "frontend/sidebars.ts" ]; then
+            echo "✓ Sidebars file exists"
+          else
+            echo "✗ Sidebars file missing"
+            exit 1
+          fi
+
+      - name: Check docs structure
+        run: |
+          if [ -d "frontend/docs" ]; then
+            echo "✓ Docs directory exists"
+            find frontend/docs -name "*.md" -o -name "*.mdx" | wc -l | xargs echo "Found documents:"
+          else
+            echo "✗ Docs directory missing"
+            exit 1
+          fi

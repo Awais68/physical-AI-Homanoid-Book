@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+  # Development edge-kit service
+  edge-kit:
+    build:
+      context: ../edge-kit
+      dockerfile: Dockerfile
+    container_name: edge-kit-ros2
+    volumes:
+      - ../edge-kit/ros2_ws/src:/ros2_ws/src
+    environment:
+      - ROS_DOMAIN_ID=0
+    networks:
+      - edgekit-network
+    tty: true
+    stdin_open: true
+
+  # Production edge-kit service for 7-day deployment
+  edge-kit-prod:
+    build:
+      context: ../edge-kit
+      dockerfile: Dockerfile.prod
+    container_name: edge-kit-ros2-prod
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      # Persistent data volumes
+      - edge_kit_logs:/ros2_ws/data/logs
+      - edge_kit_metrics:/ros2_ws/data/metrics
+      - edge_kit_alerts:/ros2_ws/data/alerts
+      - edge_kit_backups:/ros2_ws/data/backups
+      # Source code for development (optional, remove in pure production)
+      - ../edge-kit/ros2_ws/src:/ros2_ws/src:ro
+    environment:
+      - ROS_DOMAIN_ID=0
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - EDGE_HEALTH_LOG_LEVEL=INFO
+      - EDGE_HEALTH_PUBLISH_FREQUENCY=1.0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    networks:
+      - edgekit-network
+    tty: true
+    stdin_open: true
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - QDRANT_HOST=${QDRANT_HOST}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=${BETTER_AUTH_URL}
+    volumes:
+      - ../backend:/app
+    depends_on:
+      - postgres
+      - qdrant
+    networks:
+      - edgekit-network
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    volumes:
+      - ../frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - edgekit-network
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=physical_ai_edge_kit
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - edgekit-network
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: always
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+    networks:
+      - edgekit-network
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  # Edge kit persistent volumes for 7-day deployment
+  edge_kit_logs:
+  edge_kit_metrics:
+  edge_kit_alerts:
+  edge_kit_backups:
+
+networks:
+  edgekit-network:
+    driver: bridge

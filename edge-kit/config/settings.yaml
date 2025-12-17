@@ -1,0 +1,6 @@
+device:
+  name: physical-ai-edge-kit
+  ros_domain_id: 0
+
+safety:
+  emergency_stop: true

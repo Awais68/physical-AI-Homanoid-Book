@@ -1,0 +1,22 @@
+.learningObjectives {
+  background-color: var(--ifm-color-secondary-lightest);
+  border-left: 4px solid var(--ifm-color-secondary);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.header {
+  margin-bottom: 0.5rem;
+}
+
+.header h3 {
+  margin: 0;
+  color: var(--ifm-color-secondary-darker);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.content {
+  padding-left: 0.5rem;
+}

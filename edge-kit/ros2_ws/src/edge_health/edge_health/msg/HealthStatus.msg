@@ -1,0 +1,8 @@
+string node_name
+float64 timestamp
+float64 cpu_percent
+float64 memory_percent
+float64 disk_percent
+float64 temperature
+string status
+builtin_interfaces/Time header
