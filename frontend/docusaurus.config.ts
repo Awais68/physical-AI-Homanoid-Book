@@ -25,14 +25,81 @@ const config: Config = {
   organizationName: 'Awais68', // Usually your GitHub org/user name.
   projectName: 'physical-AI-Homanoid-Book', // Usually your repo name.
 
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
+  trailingSlash: false,
+
+  markdown: {
+    format: 'detect',
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en'],
+    locales: ['en', 'ur', 'ur-PK', 'ar', 'es', 'fr', 'de', 'zh', 'hi', 'pt', 'ru', 'ja'],
+    localeConfigs: {
+      en: {
+        label: 'English',
+        direction: 'ltr',
+        htmlLang: 'en-US',
+      },
+      ur: {
+        label: 'اردو (Urdu)',
+        direction: 'rtl',
+        htmlLang: 'ur',
+      },
+      'ur-PK': {
+        label: 'Roman Urdu',
+        direction: 'ltr',
+        htmlLang: 'ur-PK',
+      },
+      ar: {
+        label: 'العربية (Arabic)',
+        direction: 'rtl',
+        htmlLang: 'ar',
+      },
+      es: {
+        label: 'Español (Spanish)',
+        direction: 'ltr',
+        htmlLang: 'es',
+      },
+      fr: {
+        label: 'Français (French)',
+        direction: 'ltr',
+        htmlLang: 'fr',
+      },
+      de: {
+        label: 'Deutsch (German)',
+        direction: 'ltr',
+        htmlLang: 'de',
+      },
+      zh: {
+        label: '中文 (Chinese)',
+        direction: 'ltr',
+        htmlLang: 'zh-CN',
+      },
+      hi: {
+        label: 'हिन्दी (Hindi)',
+        direction: 'ltr',
+        htmlLang: 'hi',
+      },
+      pt: {
+        label: 'Português (Portuguese)',
+        direction: 'ltr',
+        htmlLang: 'pt',
+      },
+      ru: {
+        label: 'Русский (Russian)',
+        direction: 'ltr',
+        htmlLang: 'ru',
+      },
+      ja: {
+        label: '日本語 (Japanese)',
+        direction: 'ltr',
+        htmlLang: 'ja',
+      },
+    },
   },
 
   presets: [
@@ -88,6 +155,10 @@ const config: Config = {
           label: 'Book Content',
         },
         { to: '/blog', label: 'Blog', position: 'left' },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
         {
           href: 'https://github.com/Awais68/physical-AI-Homanoid-Book',
           label: 'GitHub',

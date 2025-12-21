@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Physical AI aur Robotics",
+    "description": "The title in the navbar"
+  },
+  "logo.alt": {
+    "message": "Physical AI aur Robotics Logo",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Book Content": {
+    "message": "Kitab ka Mawad",
+    "description": "Navbar item with label Book Content"
+  },
+  "item.label.Blog": {
+    "message": "Blog",
+    "description": "Navbar item with label Blog"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

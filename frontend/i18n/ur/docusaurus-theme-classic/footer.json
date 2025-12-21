@@ -1,0 +1,50 @@
+{
+  "link.title.Documentation": {
+    "message": "دستاویزات",
+    "description": "The title of the footer links column with title=Documentation in the footer"
+  },
+  "link.title.Resources": {
+    "message": "وسائل",
+    "description": "The title of the footer links column with title=Resources in the footer"
+  },
+  "link.title.Connect": {
+    "message": "رابطہ",
+    "description": "The title of the footer links column with title=Connect in the footer"
+  },
+  "link.item.label.Getting Started": {
+    "message": "شروعات",
+    "description": "The label of footer link with label=Getting Started linking to /docs/"
+  },
+  "link.item.label.Scope & Boundaries": {
+    "message": "دائرہ کار اور حدود",
+    "description": "The label of footer link with label=Scope & Boundaries linking to /docs/01-scope-boundaries"
+  },
+  "link.item.label.Ethical Framework": {
+    "message": "اخلاقی فریم ورک",
+    "description": "The label of footer link with label=Ethical Framework linking to /docs/02-ethical-dilemmas"
+  },
+  "link.item.label.Technical Concepts": {
+    "message": "تکنیکی تصورات",
+    "description": "The label of footer link with label=Technical Concepts linking to /docs/03-technical-concepts"
+  },
+  "link.item.label.Pedagogical Approaches": {
+    "message": "تدریسی طریقے",
+    "description": "The label of footer link with label=Pedagogical Approaches linking to /docs/04-pedagogical-approaches"
+  },
+  "link.item.label.Implementation Guide": {
+    "message": "نفاذ کی رہنما",
+    "description": "The label of footer link with label=Implementation Guide linking to /docs/06-implementation-guidance"
+  },
+  "link.item.label.Blog": {
+    "message": "بلاگ",
+    "description": "The label of footer link with label=Blog linking to /blog"
+  },
+  "link.item.label.GitHub Repository": {
+    "message": "GitHub ریپوزٹری",
+    "description": "The label of footer link with label=GitHub Repository linking to https://github.com/Awais68/physical-AI-Homanoid-Book"
+  },
+  "copyright": {
+    "message": "کاپی رائٹ © 2025 فزیکل اے آئی اور ہیومینوئڈ روبوٹکس | تخیل اے ایس ڈویلپرز کے ساتھ حقیقت بنتی ہے",
+    "description": "The footer copyright"
+  }
+}

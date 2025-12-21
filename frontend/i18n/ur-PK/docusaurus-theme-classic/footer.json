@@ -1,0 +1,50 @@
+{
+  "link.title.Documentation": {
+    "message": "Dastaveyzat",
+    "description": "The title of the footer links column with title=Documentation in the footer"
+  },
+  "link.title.Resources": {
+    "message": "Wasail",
+    "description": "The title of the footer links column with title=Resources in the footer"
+  },
+  "link.title.Connect": {
+    "message": "Rabta",
+    "description": "The title of the footer links column with title=Connect in the footer"
+  },
+  "link.item.label.Getting Started": {
+    "message": "Shuruat",
+    "description": "The label of footer link with label=Getting Started linking to /docs/"
+  },
+  "link.item.label.Scope & Boundaries": {
+    "message": "Daira Kar aur Hadood",
+    "description": "The label of footer link with label=Scope & Boundaries linking to /docs/01-scope-boundaries"
+  },
+  "link.item.label.Ethical Framework": {
+    "message": "Ikhlaaqi Framework",
+    "description": "The label of footer link with label=Ethical Framework linking to /docs/02-ethical-dilemmas"
+  },
+  "link.item.label.Technical Concepts": {
+    "message": "Takneeki Tasawurat",
+    "description": "The label of footer link with label=Technical Concepts linking to /docs/03-technical-concepts"
+  },
+  "link.item.label.Pedagogical Approaches": {
+    "message": "Tadreesi Tareeqay",
+    "description": "The label of footer link with label=Pedagogical Approaches linking to /docs/04-pedagogical-approaches"
+  },
+  "link.item.label.Implementation Guide": {
+    "message": "Nifaaz ki Rahnuma",
+    "description": "The label of footer link with label=Implementation Guide linking to /docs/06-implementation-guidance"
+  },
+  "link.item.label.Blog": {
+    "message": "Blog",
+    "description": "The label of footer link with label=Blog linking to /blog"
+  },
+  "link.item.label.GitHub Repository": {
+    "message": "GitHub Repository",
+    "description": "The label of footer link with label=GitHub Repository linking to https://github.com/Awais68/physical-AI-Homanoid-Book"
+  },
+  "copyright": {
+    "message": "Copyright © 2025 Physical AI aur Humanoid Robotics | Takhayul AS Developers ke saath haqeeqat banti hai",
+    "description": "The footer copyright"
+  }
+}

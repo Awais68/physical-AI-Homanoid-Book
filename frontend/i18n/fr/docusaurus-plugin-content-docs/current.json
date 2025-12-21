@@ -1,0 +1,18 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Book Content": {
+    "message": "Book Content",
+    "description": "The label for category 'Book Content' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Edge Kit": {
+    "message": "Edge Kit",
+    "description": "The label for category 'Edge Kit' in sidebar 'tutorialSidebar'"
+  },
+  "sidebar.tutorialSidebar.category.Additional Resources": {
+    "message": "Additional Resources",
+    "description": "The label for category 'Additional Resources' in sidebar 'tutorialSidebar'"
+  }
+}
