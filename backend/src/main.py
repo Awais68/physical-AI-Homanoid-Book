@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from src.api.routers import devices, safety, users, chat, personalization, i18n
+from src.api.routers import devices, safety, users, chat, personalization, i18n, translations
+from src.api.translation_middleware import TranslationMiddleware
 from src.database import engine
 from src.models import Base
 
@@ -13,6 +14,9 @@ app = FastAPI(
     description="API for managing physical AI devices and educational robotics in educational environments",
     version="1.0.0"
 )
+
+# Add Translation middleware
+app.add_middleware(TranslationMiddleware)
 
 # Add CORS middleware
 app.add_middleware(
@@ -30,6 +34,7 @@ app.include_router(users.router, prefix="/api", tags=["users"])
 app.include_router(chat.router, prefix="/api", tags=["chat"])
 app.include_router(personalization.router, prefix="/api", tags=["personalization"])
 app.include_router(i18n.router, prefix="/api", tags=["i18n"])
+app.include_router(translations.router, prefix="/api", tags=["translations"])
 
 @app.get("/")
 def read_root():

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages 404 redirect for client-side routing
+      const path = window.location.pathname;
+      const baseUrl = '/physical-AI-Homanoid-Book';
+
+      // If we're not at the base URL, redirect there
+      if (path !== baseUrl + '/' && path !== baseUrl) {
+        // Store the path for potential SPA routing
+        sessionStorage.setItem('redirect', path);
+        window.location.href = baseUrl + '/';
+      }
+    </script>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+  </body>
+</html>
