@@ -1,7 +1,6 @@
 ---
-title: Dastaveyzat ki Updates
+title: Documentation Updates
 ---
-
 # Documentation Updates
 
 ## Overview

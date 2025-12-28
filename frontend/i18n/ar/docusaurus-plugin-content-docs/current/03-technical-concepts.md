@@ -4,7 +4,6 @@ sidebar_position: 3
 title: Technical Concepts in Physical AI & Humanoid Robotics
 description: Core technical principles and concepts underlying humanoid robots in educational contexts
 ---
-
 # Technical Concepts in Physical AI & Humanoid Robotics
 
 ## Learning Objectives

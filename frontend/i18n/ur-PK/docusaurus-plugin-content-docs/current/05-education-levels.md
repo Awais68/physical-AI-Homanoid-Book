@@ -1,10 +1,9 @@
 ---
 id: 05-education-levels
 sidebar_position: 5
-title: Taleemi Satah ke Khayalat
+title: Educational Level Considerations
 description: Adapting humanoid robot implementations for different educational levels and age groups
 ---
-
 # Educational Level Considerations
 
 ## Learning Objectives

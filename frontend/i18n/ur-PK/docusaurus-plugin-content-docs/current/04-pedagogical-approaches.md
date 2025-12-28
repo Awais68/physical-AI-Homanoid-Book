@@ -1,10 +1,9 @@
 ---
 id: 04-pedagogical-approaches
 sidebar_position: 4
-title: Humanoid Robots ke saath Tadreesi Tareeqay
+title: Pedagogical Approaches with Humanoid Robots
 description: Effective teaching methods and learning theories when using humanoid robots as educational tools
 ---
-
 # Pedagogical Approaches with Humanoid Robots
 
 ## Learning Objectives

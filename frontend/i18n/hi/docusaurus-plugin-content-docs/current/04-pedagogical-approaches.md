@@ -4,7 +4,6 @@ sidebar_position: 4
 title: Pedagogical Approaches with Humanoid Robots
 description: Effective teaching methods and learning theories when using humanoid robots as educational tools
 ---
-
 # Pedagogical Approaches with Humanoid Robots
 
 ## Learning Objectives

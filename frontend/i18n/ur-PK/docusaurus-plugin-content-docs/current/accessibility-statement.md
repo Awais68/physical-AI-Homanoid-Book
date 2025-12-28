@@ -1,7 +1,6 @@
 ---
-title: Rasooi ka Bayan
+title: Accessibility Statement
 ---
-
 # Accessibility Statement for Physical AI & Humanoid Robotics in Education
 
 ## Our Commitment to Accessibility
