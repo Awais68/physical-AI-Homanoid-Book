@@ -1,7 +1,6 @@
 ---
 title: Content Update Procedures
 ---
-
 # Content Update Procedures for Physical AI & Humanoid Robotics in Education
 
 ## Overview

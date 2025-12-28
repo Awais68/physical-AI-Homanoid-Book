@@ -1,0 +1,281 @@
+openapi: 3.1.0
+info:
+  title: Text Clarifier and Translator API
+  description: |
+    AI-powered text processing service that clarifies unclear text and translates
+    it to target languages. Returns structured JSON output with both original and
+    processed text.
+  version: 1.0.0
+  contact:
+    name: API Support
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server
+
+paths:
+  /process:
+    post:
+      operationId: processText
+      summary: Process text for clarification and translation
+      description: |
+        Accepts text input and optional target language. Clarifies the input text
+        by removing redundancy, fixing grammar, and improving clarity. Then translates
+        to the specified target language (defaults to English).
+      tags:
+        - Text Processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextProcessRequest'
+            examples:
+              basic:
+                summary: Basic clarification request
+                value:
+                  user_text: "I want to make sure that you understand that this is very important thing."
+                  target_language: "en"
+              translation:
+                summary: Translation to Spanish
+                value:
+                  user_text: "Please be advised that your appointment has been confirmed."
+                  target_language: "es"
+              no_language:
+                summary: Default to English
+                value:
+                  user_text: "The meeting will be held at the time that was previously discussed."
+      responses:
+        '200':
+          description: Text processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextProcessResponse'
+              examples:
+                clarified:
+                  summary: Clarified and translated text
+                  value:
+                    original_text: "I want to make sure that you understand that this is very important thing."
+                    translated_text: "Please understand this is very important."
+        '400':
+          description: Invalid request (validation error or unsupported language)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                empty_text:
+                  summary: Empty text error
+                  value:
+                    error_type: "VALIDATION_ERROR"
+                    message: "Text input cannot be empty"
+                    details: null
+                unsupported_language:
+                  summary: Unsupported language error
+                  value:
+                    error_type: "UNSUPPORTED_LANGUAGE"
+                    message: "Language 'xyz' is not supported"
+                    details:
+                      supported_languages: ["en", "es", "fr", "de", "zh", "ja", "ar", "hi", "pt", "ru", "ko", "it"]
+        '500':
+          description: Processing error (LLM failure)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                processing_error:
+                  summary: LLM processing failed
+                  value:
+                    error_type: "PROCESSING_ERROR"
+                    message: "Failed to process text. Please try again."
+                    details: null
+        '503':
+          description: Service temporarily unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                service_unavailable:
+                  summary: Service unavailable
+                  value:
+                    error_type: "SERVICE_UNAVAILABLE"
+                    message: "Service is temporarily unavailable. Please retry after 30 seconds."
+                    details:
+                      retry_after: 30
+
+  /languages:
+    get:
+      operationId: getSupportedLanguages
+      summary: Get list of supported languages
+      description: Returns all languages supported for translation.
+      tags:
+        - Configuration
+      responses:
+        '200':
+          description: List of supported languages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageListResponse'
+              example:
+                languages:
+                  - code: "en"
+                    name: "English"
+                    native_name: "English"
+                  - code: "es"
+                    name: "Spanish"
+                    native_name: "Espanol"
+
+  /health:
+    get:
+      operationId: healthCheck
+      summary: Health check endpoint
+      description: Returns service health status.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: "healthy"
+                version: "1.0.0"
+
+components:
+  schemas:
+    TextProcessRequest:
+      type: object
+      required:
+        - user_text
+      properties:
+        user_text:
+          type: string
+          minLength: 1
+          maxLength: 5000
+          description: The text to clarify and/or translate
+          example: "I want to make sure that you understand that this is very important thing."
+        target_language:
+          type: string
+          default: "en"
+          description: Target language code (ISO 639-1) or full name
+          example: "es"
+          enum:
+            - en
+            - es
+            - fr
+            - de
+            - zh
+            - ja
+            - ar
+            - hi
+            - pt
+            - ru
+            - ko
+            - it
+
+    TextProcessResponse:
+      type: object
+      required:
+        - original_text
+        - translated_text
+      properties:
+        original_text:
+          type: string
+          description: The original user input (unchanged)
+          example: "I want to make sure that you understand that this is very important thing."
+        translated_text:
+          type: string
+          description: Clarified and translated text
+          example: "Please understand this is very important."
+
+    ErrorResponse:
+      type: object
+      required:
+        - error_type
+        - message
+      properties:
+        error_type:
+          $ref: '#/components/schemas/ErrorType'
+        message:
+          type: string
+          description: Human-readable error description
+          example: "Text input cannot be empty"
+        details:
+          type: object
+          nullable: true
+          description: Additional error context
+          additionalProperties: true
+
+    ErrorType:
+      type: string
+      enum:
+        - VALIDATION_ERROR
+        - UNSUPPORTED_LANGUAGE
+        - PROCESSING_ERROR
+        - SERVICE_UNAVAILABLE
+      description: Category of error
+
+    Language:
+      type: object
+      required:
+        - code
+        - name
+        - native_name
+      properties:
+        code:
+          type: string
+          description: ISO 639-1 language code
+          example: "en"
+        name:
+          type: string
+          description: English name of the language
+          example: "English"
+        native_name:
+          type: string
+          description: Native name of the language
+          example: "English"
+
+    LanguageListResponse:
+      type: object
+      required:
+        - languages
+      properties:
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - version
+      properties:
+        status:
+          type: string
+          enum:
+            - healthy
+            - degraded
+            - unhealthy
+          example: "healthy"
+        version:
+          type: string
+          example: "1.0.0"
+
+tags:
+  - name: Text Processing
+    description: Core text clarification and translation operations
+  - name: Configuration
+    description: Service configuration and supported options
+  - name: Health
+    description: Service health and status endpoints

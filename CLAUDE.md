@@ -220,6 +220,8 @@ See `.specify/memory/constitution.md` for code quality, testing, performance, se
 - Neon Serverless Postgres database for structured user data, Qdrant Cloud for vector storage of indexed documentation, file storage for educational content and logs (004-physical-ai-edge-kit)
 - Python 3.11 + rclpy (ROS2 Python client library), psutil (system monitoring), pyyaml (configuration) (001-physical-ai-monitoring)
 - Local file storage for logs, YAML configuration files (001-physical-ai-monitoring)
+- Python 3.11+ + FastAPI (web framework), Pydantic (validation), LangChain or OpenAI SDK (LLM integration), uvicorn (ASGI server) (005-text-clarify-translate)
+- N/A (stateless service - no persistent storage required) (005-text-clarify-translate)
 
 ## Recent Changes
 - 002-docusaurus-site-setup: Added JavaScript (ES6+), Node.js (latest LTS) + Docusaurus 3.x, React, MDX

@@ -1,7 +1,6 @@
 ---
 title: Content Versioning Strategy
 ---
-
 # Content Versioning Strategy for Physical AI & Humanoid Robotics in Education
 
 ## Overview

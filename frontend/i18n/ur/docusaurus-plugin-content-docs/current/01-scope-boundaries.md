@@ -4,7 +4,6 @@ sidebar_position: 1
 title: Scope Boundaries for Physical AI & Humanoid Robotics in Education
 description: Defining clear boundaries for educational contexts, age groups, and topics
 ---
-
 # Scope Boundaries for Physical AI & Humanoid Robotics in Education
 
 ## Learning Objectives

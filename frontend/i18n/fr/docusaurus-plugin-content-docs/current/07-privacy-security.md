@@ -4,7 +4,6 @@ sidebar_position: 7
 title: Data Privacy and Security in Educational Robotics
 description: Compliance requirements and best practices for protecting student data in educational robotics applications
 ---
-
 # Data Privacy and Security in Educational Robotics
 
 ## Learning Objectives

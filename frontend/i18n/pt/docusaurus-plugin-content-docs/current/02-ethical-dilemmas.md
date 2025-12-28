@@ -4,7 +4,6 @@ sidebar_position: 2
 title: Ethical Dilemmas & Controversies in Educational Robotics
 description: Key ethical challenges and controversies in implementing humanoid robots in educational settings
 ---
-
 # Ethical Dilemmas & Controversies in Educational Robotics
 
 ## Learning Objectives

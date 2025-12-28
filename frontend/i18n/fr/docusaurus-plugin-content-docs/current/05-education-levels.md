@@ -4,7 +4,6 @@ sidebar_position: 5
 title: Educational Level Considerations
 description: Adapting humanoid robot implementations for different educational levels and age groups
 ---
-
 # Educational Level Considerations
 
 ## Learning Objectives

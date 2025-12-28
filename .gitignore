@@ -42,6 +42,7 @@ env/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+coverage_html/
 
 # ROS2
 edge-kit/ros2_ws/build/
