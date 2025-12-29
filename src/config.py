@@ -62,6 +62,42 @@ class Settings(BaseSettings):
         description="OpenAI API timeout in seconds",
     )
 
+    # RAG Configuration (Qdrant)
+    qdrant_url: str = Field(
+        default="http://localhost:6333",
+        description="Qdrant vector database URL",
+    )
+    qdrant_api_key: str | None = Field(
+        default=None,
+        description="Qdrant API key (optional for local)",
+    )
+    qdrant_collection: str = Field(
+        default="physical_ai_docs",
+        description="Qdrant collection name for RAG retrieval",
+    )
+    qdrant_timeout: int = Field(
+        default=10,
+        ge=1,
+        le=60,
+        description="Qdrant connection timeout in seconds",
+    )
+    rag_enabled: bool = Field(
+        default=False,
+        description="Enable RAG context retrieval for clarification",
+    )
+    rag_top_k: int = Field(
+        default=5,
+        ge=1,
+        le=20,
+        description="Number of documents to retrieve from Qdrant",
+    )
+    rag_similarity_threshold: float = Field(
+        default=0.4,
+        ge=0.0,
+        le=1.0,
+        description="Minimum similarity score for retrieved documents",
+    )
+
     # Application metadata
     app_name: str = Field(
         default="Text Clarifier and Translator",
@@ -99,3 +135,13 @@ def is_openai_configured() -> bool:
     """
     settings = get_settings()
     return bool(settings.openai_api_key and settings.openai_api_key.startswith("sk-"))
+
+
+def is_rag_enabled() -> bool:
+    """Check if RAG is properly configured and enabled.
+
+    Returns:
+        True if RAG is enabled and configured, False otherwise
+    """
+    settings = get_settings()
+    return settings.rag_enabled and bool(settings.qdrant_url)

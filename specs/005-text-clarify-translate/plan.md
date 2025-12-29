@@ -5,13 +5,13 @@
 
 ## Summary
 
-Build an AI-powered text processing service that clarifies/specifies unclear text and translates it to target languages, returning structured JSON output with both original and processed text. The system uses an LLM backend for natural language processing with a REST API interface for client integration.
+Build an AI-powered text processing service that clarifies/specifies unclear text and translates it to target languages, returning structured JSON output with both original and processed text. The system uses an LLM backend (OpenAI SDK) for natural language processing with a REST API interface for client integration, and integrates with the existing RAG chatbot (qdrant-rag-responder) to enhance clarification with domain-specific knowledge from the Physical AI documentation stored in Qdrant vector database.
 
 ## Technical Context
 
 **Language/Version**: Python 3.11+
-**Primary Dependencies**: FastAPI (web framework), Pydantic (validation), LangChain or OpenAI SDK (LLM integration), uvicorn (ASGI server)
-**Storage**: N/A (stateless service - no persistent storage required)
+**Primary Dependencies**: FastAPI (web framework), Pydantic (validation), OpenAI SDK (LLM integration using gpt-4o-mini), qdrant-client (vector database for RAG), uvicorn (ASGI server)
+**Storage**: Qdrant vector database (read-only access for RAG context retrieval)
 **Testing**: pytest, pytest-asyncio, httpx (async client testing)
 **Target Platform**: Linux server / Docker container / Cloud deployment
 **Project Type**: single (API service)
@@ -27,7 +27,7 @@ Build an AI-powered text processing service that clarifies/specifies unclear tex
 |-----------|--------|-------|
 | I. Test-First | PASS | Unit tests for text processing, integration tests for API endpoints, contract tests for JSON schema |
 | II. Library-First Design | PASS | Core text processing logic as standalone module (`text_processor/`), API layer separate |
-| III. CLI Interface | PASS | FastAPI provides automatic OpenAPI docs; CLI wrapper can be added for direct text processing |
+| III. CLI Interface | PASS | CLI interface MANDATORY per Constitution; provides stdin/args → stdout, errors → stderr with JSON + human-readable formats |
 | IV. Integration Testing | PASS | Integration tests for LLM API calls, API endpoint tests with mock LLM responses |
 | V. Observability | PASS | Structured logging for all requests/responses, error tracking with request IDs |
 | VI. Graceful Degradation | PASS | Handle LLM API failures with error responses, validate input before processing |
@@ -59,6 +59,7 @@ src/
 │   ├── __init__.py
 │   ├── clarifier.py         # Text clarification logic
 │   ├── translator.py        # Translation logic
+│   ├── rag_client.py       # RAG integration (Qdrant, context retrieval)
 │   ├── language_config.py   # Supported languages config
 │   └── models.py            # Pydantic models
 ├── api/                     # FastAPI application
@@ -66,24 +67,29 @@ src/
 │   ├── main.py              # FastAPI app entry point
 │   ├── routes.py            # API routes
 │   └── middleware.py        # Logging, error handling
-├── cli/                     # CLI interface (optional)
+├── cli/                     # CLI interface (MANDATORY - Constitution III)
 │   ├── __init__.py
-│   └── main.py              # CLI entry point
+│   ├── main.py              # CLI entry point - stdin/args → stdout, errors → stderr
+│   └── formatters.py        # JSON + human-readable output formatters
 └── config.py                # App configuration
 
 tests/
 ├── unit/
 │   ├── test_clarifier.py
 │   ├── test_translator.py
+│   ├── test_rag_client.py   # RAG client tests
 │   └── test_models.py
 ├── integration/
 │   ├── test_api.py
-│   └── test_llm_integration.py
+│   ├── test_llm_integration.py
+│   ├── test_cli.py          # CLI integration tests (stdin/args validation)
+│   └── test_rag_integration.py  # RAG integration tests
 └── contract/
-    └── test_json_schema.py
+    ├── test_json_schema.py
+    └── test_rag_clarify.py # RAG-enhanced clarification contract tests
 ```
 
-**Structure Decision**: Single project structure selected. Core text processing logic isolated in `text_processor/` module following Library-First principle, with separate API layer for web interface and optional CLI for direct usage.
+**Structure Decision**: Single project structure selected. Core text processing logic isolated in `text_processor/` module following Library-First principle, with separate API layer for web interface and MANDATORY CLI per Constitution Principle III (stdin/args → stdout protocol).
 
 ## Complexity Tracking
 

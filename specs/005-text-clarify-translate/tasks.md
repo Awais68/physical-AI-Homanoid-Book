@@ -10,7 +10,7 @@
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependencies)
-- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
+- **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3, RAG)
 - Include exact file paths in descriptions
 
 ## Path Conventions
@@ -125,17 +125,43 @@
 
 ---
 
-## Phase 6: Polish & Cross-Cutting Concerns
+## Phase 6: RAG Chatbot Integration
+
+**Goal**: Enhance clarification and translation with domain-specific knowledge from Physical AI documentation stored in Qdrant vector database
+
+**Independent Test**: Submit unclear technical text about Physical AI → Receive clarification enhanced with retrieved context and citations
+
+### Tests for RAG Integration
+
+- [X] T042 [P] [RAG] Unit test for RAG client in tests/unit/test_rag_client.py (Qdrant connection, retrieval, citation formatting)
+- [X] T043 [P] [RAG] Contract test for RAG-enhanced clarification in tests/contract/test_rag_clarify.py
+- [X] T044 [P] [RAG] Integration test for RAG + clarification workflow in tests/integration/test_rag_integration.py
+
+### Implementation for RAG Integration
+
+- [X] T045 [RAG] Create RAG client module in src/text_processor/rag_client.py (Qdrant connection, context retrieval, citation extraction)
+- [X] T046 [RAG] Update clarifier to support RAG context in src/text_processor/clarifier.py (enhance prompts with retrieved documentation)
+- [X] T047 [RAG] Add RAG configuration in src/config.py (QDRANT_URL, QDRANT_COLLECTION, RAG_TOP_K, RAG_SIMILARITY_THRESHOLD)
+- [X] T048 [RAG] Update /process endpoint for RAG-enhanced mode in src/api/routes.py (optional use_rag=true parameter)
+- [X] T049 [RAG] Add citation formatting in src/text_processor/rag_client.py (inline citations, source lists)
+- [X] T050 [RAG] Add graceful degradation when RAG unavailable in src/text_processor/rag_client.py (fallback to standard clarification)
+- [X] T051 [RAG] Add RAG metrics logging in src/text_processor/rag_client.py (retrieval time, document count, relevance scores)
+
+**Checkpoint**: RAG integration complete - clarification can leverage Physical AI documentation with citations
+
+---
+
+## Phase 7: Polish & Cross-Cutting Concerns
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [X] T035 [P] Implement /health endpoint in src/api/routes.py (GET /health, return HealthResponse)
-- [X] T036 [P] Add unit tests for models in tests/unit/test_models.py (validation rules, serialization)
-- [X] T037 [P] Create CLI interface in src/cli/main.py (argparse, stdin support, JSON output)
-- [X] T038 Run all tests and verify 80% coverage minimum
-- [X] T039 [P] Create Dockerfile for containerized deployment
-- [X] T040 Validate against quickstart.md scenarios (all 6 integration scenarios)
-- [X] T041 [P] Add OpenAPI documentation customizations in src/api/main.py (descriptions, examples)
+- [X] T052 [P] Implement /health endpoint in src/api/routes.py (GET /health, return HealthResponse)
+- [X] T053 [P] Add unit tests for models in tests/unit/test_models.py (validation rules, serialization)
+- [X] T054 [P] Create CLI interface in src/cli/main.py (argparse, stdin support, JSON output) - MANDATORY per Constitution III
+- [X] T055 Run all tests and verify 80% coverage minimum
+- [X] T056 [P] Create Dockerfile for containerized deployment
+- [X] T057 Validate against quickstart.md scenarios (all 6 integration scenarios)
+- [X] T058 [P] Add OpenAPI documentation customizations in src/api/main.py (descriptions, examples)
 
 ---
 
@@ -148,7 +174,8 @@
 - **User Stories (Phase 3-5)**: All depend on Foundational phase completion
   - User stories can proceed in parallel (if staffed)
   - Or sequentially in priority order (P1 → P2 → P3)
-- **Polish (Phase 6)**: Depends on all user stories being complete
+- **RAG Integration (Phase 6)**: Depends on User Story 1 (clarification) complete; enhances all subsequent operations
+- **Polish (Phase 7)**: Depends on all user stories and RAG integration being complete
 
 ### User Story Dependencies
 
@@ -239,8 +266,9 @@ With multiple developers:
 | User Story 1 (P1) | 7 | 3 |
 | User Story 2 (P2) | 8 | 3 |
 | User Story 3 (P3) | 8 | 3 |
+| RAG Integration | 10 | 3 |
 | Polish | 7 | 5 |
-| **Total** | **41** | **20** |
+| **Total** | **51** | **20** |
 
 ---
 

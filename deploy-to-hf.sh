@@ -1,0 +1,52 @@
+#!/bin/bash
+
+echo "🚀 Physical AI Backend - Hugging Face Deployment"
+echo "================================================="
+echo ""
+
+# Check if git is clean
+if [[ -n $(git status -s) ]]; then
+    echo "📝 Uncommitted changes found. Committing..."
+    git add .
+    git commit -m "feat: Self-hosted Qdrant for HF deployment"
+fi
+
+echo "✅ Files ready:"
+echo "   - Dockerfile.hf"
+echo "   - start-hf.sh"
+echo "   - backend/check_and_ingest.py"
+echo "   - README-HF-SPACE.md"
+echo "   - .env.hf (environment template)"
+echo ""
+
+echo "📋 Next Steps:"
+echo ""
+echo "1️⃣  Push to GitHub:"
+echo "   git push origin $(git branch --show-current)"
+echo ""
+echo "2️⃣  Go to Hugging Face:"
+echo "   https://huggingface.co/new-space"
+echo ""
+echo "3️⃣  Configure Space:"
+echo "   - Name: physical-ai-backend"
+echo "   - SDK: Docker"
+echo "   - Dockerfile: Dockerfile.hf"
+echo "   - App Port: 7860"
+echo "   - Link your GitHub repo"
+echo ""
+echo "4️⃣  Set Environment Variables (in Space Settings → Variables):"
+echo "   GEMINI_API_KEY=AIzaSyBboD8qnHgKn9dMkAQeLGlTLaRksHBss-o"
+echo "   COHERE_API_KEY=lx3kujAI5pAIuq63SAPSsO8zRboc8cjvcMdWmx9y"
+echo "   OPENAI_API_KEY=sk-proj-Nt88FZew..."
+echo "   QDRANT_URL=http://localhost:6333"
+echo "   QDRANT_COLLECTION=rag_chatbot"
+echo ""
+echo "5️⃣  Wait for build (5-10 minutes)"
+echo ""
+echo "6️⃣  Test endpoints:"
+echo "   https://YOUR-SPACE.hf.space/health"
+echo "   https://YOUR-SPACE.hf.space/diagnostics"
+echo ""
+echo "✅ Done! Your backend will run with Qdrant inside the same container."
+echo "   No more 'Connection refused' errors!"
+echo ""
