@@ -80,7 +80,29 @@ def chat_completion(
         error_msg = str(e)
         print(f"⚠ Gemini API error: {error_msg}")
         
-        # Return fallback for any API issues
+        # Extract context from system_prompt if available
+        if system_prompt and "CONTEXT FROM DOCUMENTATION:" in system_prompt:
+            # Extract the context section
+            context_start = system_prompt.find("CONTEXT FROM DOCUMENTATION:")
+            if context_start != -1:
+                # Get everything after "CONTEXT FROM DOCUMENTATION:"
+                context_section = system_prompt[context_start + len("CONTEXT FROM DOCUMENTATION:"):].strip()
+                
+                # Take first 1500 characters of context
+                context_section = context_section[:1500]
+                
+                last_message = messages[-1].get('content', '') if messages else ''
+                
+                return f"""Based on the retrieved documentation about "{last_message}":
+
+{context_section}
+
+---
+**Note:** Full AI-powered analysis is temporarily unavailable due to API quota limits (20 requests/day on free tier). The information above is directly extracted from the documentation database.
+
+For more detailed AI-generated insights, the API quota will reset in 24 hours, or you can upgrade to a paid tier."""
+        
+        # Generic fallback if no context available
         last_message = messages[-1].get('content', '') if messages else ''
         return f"""Based on the available documentation, here's information about: \"{last_message}\"
 
