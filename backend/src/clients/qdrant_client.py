@@ -19,13 +19,15 @@ def get_qdrant_client() -> Optional[QdrantClient]:
     for attempt in range(max_retries):
         try:
             # Add timeout to prevent hanging
-            if settings.QDRANT_API_KEY:
+            # Only use API key if URL is HTTPS (cloud deployment)
+            if settings.QDRANT_API_KEY and settings.QDRANT_URL.startswith('https://'):
                 client = QdrantClient(
                     url=settings.QDRANT_URL,
                     api_key=settings.QDRANT_API_KEY,
                     timeout=10.0,  # 10 second timeout
                 )
             else:
+                # Local Qdrant doesn't need API key
                 client = QdrantClient(
                     url=settings.QDRANT_URL,
                     timeout=10.0,
