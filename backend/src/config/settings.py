@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # Qdrant Vector Database
     QDRANT_URL: str = os.getenv("QDRANT_URL", "http://localhost:6333")
     QDRANT_API_KEY: Optional[str] = os.getenv("QDRANT_API_KEY")
-    QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "physical_ai_docs")
+    QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "rag_chatbot")
 
     # Cohere (for embeddings - matches existing data)
     COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "")
@@ -26,7 +26,7 @@ class Settings(BaseSettings):
 
     # Gemini (for chat completion)
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_CHAT_MODEL: str = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.0-flash")
+    GEMINI_CHAT_MODEL: str = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
 
     # OpenAI (fallback)
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")

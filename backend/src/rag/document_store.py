@@ -1,8 +1,9 @@
 """Document storage and retrieval for RAG system."""
 from typing import Optional
 import uuid
-from src.clients.openai_client import get_embedding
-from src.clients.qdrant_client import upsert_documents, search_similar
+import hashlib
+from src.clients.cohere_client import get_document_embedding
+from src.clients.qdrant_client import upsert_documents, search_similar, get_collection_info
 from src.config.settings import settings
 
 
@@ -16,6 +17,25 @@ class DocumentStore:
             collection_name: Qdrant collection name.
         """
         self.collection_name = collection_name or settings.QDRANT_COLLECTION
+        self._embedding_cache = {}
+        
+    def _check_document_exists(self, content: str) -> Optional[str]:
+        """Check if document with same content already exists.
+        
+        Args:
+            content: Document content to check.
+            
+        Returns:
+            Existing document ID if found, None otherwise.
+        """
+        content_hash = hashlib.md5(content.encode()).hexdigest()
+        
+        # Check in cache first
+        if content_hash in self._embedding_cache:
+            print(f"✓ Document already exists (cached) - skipping Cohere API call")
+            return self._embedding_cache[content_hash]
+        
+        return None
 
     async def add_document(
         self,
@@ -41,10 +61,20 @@ class DocumentStore:
         Returns:
             Document ID.
         """
+        # Check if document already exists
+        existing_id = self._check_document_exists(content)
+        if existing_id:
+            return existing_id
+        
         doc_id = str(uuid.uuid4())
 
-        # Generate embedding
-        embedding = await get_embedding(content)
+        # Generate embedding only for new documents
+        print(f"→ Generating embedding for new document: {title or 'Untitled'}")
+        embedding = get_document_embedding(content)
+        
+        # Cache the document
+        content_hash = hashlib.md5(content.encode()).hexdigest()
+        self._embedding_cache[content_hash] = doc_id
 
         # Create payload
         payload = {
@@ -55,10 +85,11 @@ class DocumentStore:
             "section": section or "",
             "tags": tags or [],
             "metadata": metadata or {},
+            "content_hash": content_hash,  # Store hash for deduplication
         }
 
         # Upsert to Qdrant
-        await upsert_documents(
+        upsert_documents(
             collection_name=self.collection_name,
             documents=[{
                 "id": doc_id,
@@ -66,7 +97,8 @@ class DocumentStore:
                 "payload": payload,
             }],
         )
-
+        
+        print(f"✓ Document added successfully: {doc_id}")
         return doc_id
 
     async def add_documents_batch(

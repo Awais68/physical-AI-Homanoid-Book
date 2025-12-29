@@ -68,7 +68,7 @@ A user provides unclear text and a target language, and receives both the origin
 
 ### Functional Requirements
 
-- **FR-001**: System MUST accept text input and target language parameters
+- **FR-001**: System MUST accept text input and target language parameters, using OpenAI SDK (gpt-4o-mini) as the primary LLM provider for both text clarification and translation
 - **FR-002**: System MUST clarify input text by removing redundancy, fixing grammar, and improving clarity
 - **FR-003**: System MUST translate clarified text to the specified target language
 - **FR-004**: System MUST preserve the original meaning of the text throughout processing
@@ -76,10 +76,11 @@ A user provides unclear text and a target language, and receives both the origin
 - **FR-006**: System MUST default to English when target language is not specified
 - **FR-007**: System MUST validate that input text is not empty before processing
 - **FR-008**: System MUST return appropriate error messages in JSON format for invalid inputs
-- **FR-009**: System MUST support common languages including English, Spanish, French, German, Chinese, Japanese, Arabic, and Hindi at minimum
+- **FR-009**: System MUST support the following 14 languages with ISO 639-1 codes: English (en), Spanish (es), French (fr), German (de), Chinese (zh), Japanese (ja), Arabic (ar), Hindi (hi), Portuguese (pt), Russian (ru), Korean (ko), Italian (it), Urdu (ur), Roman Urdu (ur-PK)
 - **FR-010**: System MUST handle text inputs up to 5,000 characters
 - **FR-011**: System MUST avoid adding information not present in the original text
 - **FR-012**: System MUST ensure translations are natural and idiomatic, not literal word-for-word
+- **FR-013**: System MUST integrate with existing RAG chatbot (qdrant-rag-responder) to enhance clarification and translation with domain-specific knowledge retrieval from the Qdrant vector database containing Physical AI documentation
 
 ### Key Entities
 
@@ -87,18 +88,20 @@ A user provides unclear text and a target language, and receives both the origin
 - **ProcessedResult**: Output containing original text and processed (clarified/translated) text; returned as structured JSON
 - **LanguageConfig**: Supported target languages and their validation rules; determines translation capabilities
 - **ErrorResponse**: Structured error information when processing fails; contains error type and descriptive message
+- **RAGContext**: Retrieved context from Qdrant vector database containing relevant Physical AI documentation fragments; used to enhance clarification with domain knowledge
+- **Citation**: Reference to source documentation used in RAG retrieval; includes source URL, title, and relevance score
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users receive processed text within 3 seconds for inputs under 1,000 characters
-- **SC-002**: 95% of clarified texts are rated as "clearer than original" by users
-- **SC-003**: 90% of translations are rated as "natural sounding" by native speakers
-- **SC-004**: System successfully parses and returns valid JSON for 100% of valid inputs
-- **SC-005**: Error messages are clear and actionable for 100% of invalid input scenarios
-- **SC-006**: System handles 100 concurrent requests without performance degradation
-- **SC-007**: Text meaning preservation rate of 98% as validated by back-translation comparison
+- **SC-001**: System completes text processing within 3 seconds for inputs under 1,000 characters (measured by timing tests)
+- **SC-002**: Clarified text is grammatically correct and has 20% fewer words than original for verbose inputs (measured by automated analysis)
+- **SC-003**: Translated text passes grammatical correctness check for target language (measured by language detection tools)
+- **SC-004**: System successfully parses and returns valid JSON for 100% of valid inputs (measured by contract tests)
+- **SC-005**: Error messages include error code, descriptive message, and suggested fix for 100% of invalid input scenarios (measured by validation tests)
+- **SC-006**: System handles 100 concurrent requests with p95 latency under 5 seconds and no more than 5% error rate (measured by load tests)
+- **SC-007**: Back-translation comparison shows 95% similarity score between original and back-translated text (measured by semantic similarity tests)
 
 ## Assumptions
 

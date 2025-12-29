@@ -44,5 +44,39 @@ def read_root():
 def health_check():
     return {"status": "healthy", "service": "backend"}
 
+@app.get("/diagnostics")
+def diagnostics():
+    """Diagnostic endpoint to check service connections."""
+    from src.clients.qdrant_client import qdrant_client
+    from src.clients.gemini_client import gemini_client
+    from src.clients.openai_client import openai_client
+    from src.config.settings import settings
+    
+    return {
+        "status": "running",
+        "services": {
+            "qdrant": {
+                "connected": qdrant_client is not None,
+                "url": settings.QDRANT_URL,
+                "collection": settings.QDRANT_COLLECTION,
+                "has_api_key": bool(settings.QDRANT_API_KEY)
+            },
+            "gemini": {
+                "connected": gemini_client is not None,
+                "model": settings.GEMINI_CHAT_MODEL,
+                "has_api_key": bool(settings.GEMINI_API_KEY)
+            },
+            "openai": {
+                "connected": openai_client is not None,
+                "model": settings.OPENAI_CHAT_MODEL,
+                "has_api_key": bool(settings.OPENAI_API_KEY)
+            },
+            "cohere": {
+                "has_api_key": bool(settings.COHERE_API_KEY),
+                "model": settings.COHERE_EMBEDDING_MODEL
+            }
+        }
+    }
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -5,18 +5,50 @@ from qdrant_client.http import models
 from src.config.settings import settings
 
 
-def get_qdrant_client() -> QdrantClient:
-    """Get Qdrant client instance.
+def get_qdrant_client() -> Optional[QdrantClient]:
+    """Get Qdrant client instance with retry logic.
 
     Returns:
-        Configured QdrantClient instance.
+        Configured QdrantClient instance or None if connection fails.
     """
-    if settings.QDRANT_API_KEY:
-        return QdrantClient(
-            url=settings.QDRANT_URL,
-            api_key=settings.QDRANT_API_KEY,
-        )
-    return QdrantClient(url=settings.QDRANT_URL)
+    import time
+    
+    max_retries = 3
+    retry_delay = 2  # seconds
+    
+    for attempt in range(max_retries):
+        try:
+            # Add timeout to prevent hanging
+            if settings.QDRANT_API_KEY:
+                client = QdrantClient(
+                    url=settings.QDRANT_URL,
+                    api_key=settings.QDRANT_API_KEY,
+                    timeout=10.0,  # 10 second timeout
+                )
+            else:
+                client = QdrantClient(
+                    url=settings.QDRANT_URL,
+                    timeout=10.0,
+                )
+            
+            # Test connection
+            client.get_collections()
+            print(f"✓ Qdrant connected: {settings.QDRANT_URL}")
+            return client
+            
+        except Exception as e:
+            error_msg = str(e)
+            if attempt < max_retries - 1:
+                print(f"⚠️ Qdrant connection attempt {attempt + 1}/{max_retries} failed: {error_msg}")
+                print(f"   Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+            else:
+                print(f"❌ Qdrant connection failed after {max_retries} attempts: {error_msg}")
+                print(f"   URL: {settings.QDRANT_URL}")
+                print(f"   API Key present: {bool(settings.QDRANT_API_KEY)}")
+                print("   System will run without document search")
+    
+    return None
 
 
 # Global client instance
@@ -54,6 +86,26 @@ def ensure_collection_exists(
         return False
 
 
+def get_collection_info(collection_name: str) -> Optional[dict]:
+    """Get information about a collection.
+    
+    Args:
+        collection_name: Name of the collection.
+        
+    Returns:
+        Dictionary with collection info or None if error.
+    """
+    try:
+        collection_info = qdrant_client.get_collection(collection_name)
+        return {
+            'points_count': collection_info.points_count,
+            'status': collection_info.status,
+        }
+    except Exception as e:
+        print(f"Error getting collection info: {e}")
+        return None
+
+
 def search_similar(
     collection_name: str,
     query_vector: list[float],
@@ -71,21 +123,41 @@ def search_similar(
     Returns:
         List of search results with payload and scores.
     """
-    results = qdrant_client.search(
-        collection_name=collection_name,
-        query_vector=query_vector,
-        limit=top_k,
-        score_threshold=score_threshold,
-    )
-
-    return [
-        {
-            "id": str(result.id),
-            "score": result.score,
-            "payload": result.payload,
-        }
-        for result in results
-    ]
+    if not qdrant_client:
+        # Only print warning once per session
+        if not hasattr(search_similar, '_warned'):
+            print("⚠️ Qdrant not available - document search disabled")
+            search_similar._warned = True
+        return []
+    
+    try:
+        results = qdrant_client.query_points(
+            collection_name=collection_name,
+            query=query_vector,
+            limit=top_k,
+            score_threshold=score_threshold,
+            with_payload=True,
+        )
+        
+        return [
+            {
+                "id": str(result.id),
+                "score": result.score,
+                "payload": result.payload,
+            }
+            for result in results.points
+        ]
+    except Exception as e:
+        error_msg = str(e)
+        # Only log connection errors once to avoid spam
+        if "Connection refused" in error_msg or "timeout" in error_msg.lower():
+            if not hasattr(search_similar, '_connection_error_logged'):
+                print(f"❌ Qdrant search error: {error_msg}")
+                print("   (This error will not be shown again this session)")
+                search_similar._connection_error_logged = True
+        else:
+            print(f"Search error: {error_msg}")
+        return []
 
 
 def upsert_documents(

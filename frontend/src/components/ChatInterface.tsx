@@ -85,8 +85,8 @@ const ChatInterface: React.FC = () => {
 
     try {
       // Use backend URL - hardcoded for browser compatibility
-      // const API_URL = 'http://localhost:8000';
-      const API_URL = 'https://awais68-physical-ai-robotics.hf.space';
+      const API_URL = 'http://localhost:8000';
+      // const API_URL = '';
       console.log('Sending message to:', `${API_URL}/api/chat/message`);
       console.log('Message content:', messageToSend);
 

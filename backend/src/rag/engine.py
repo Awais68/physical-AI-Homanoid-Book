@@ -1,8 +1,9 @@
 """RAG Engine - Core retrieval-augmented generation service."""
 from typing import Optional
+import hashlib
 from src.clients.cohere_client import get_embedding
-from src.clients.openai_client import chat_completion
-from src.clients.qdrant_client import search_similar, ensure_collection_exists
+from src.clients.gemini_client import chat_completion
+from src.clients.qdrant_client import search_similar, ensure_collection_exists, get_collection_info
 from src.config.settings import settings
 from .conversation_context import ConversationContext
 from .citation_system import CitationSystem
@@ -23,6 +24,8 @@ class RAGEngine:
         self.citation_system = CitationSystem()
         self.response_formatter = ResponseFormatter()
         self._initialized = False
+        self._embedding_cache = {}  # Cache embeddings to avoid repeated API calls
+        self._collection_has_data = False
 
     async def initialize(self) -> bool:
         """Initialize the RAG engine and ensure collection exists.
@@ -32,11 +35,50 @@ class RAGEngine:
         """
         if self._initialized:
             return True
+        
         self._initialized = ensure_collection_exists(
             self.collection_name,
             vector_size=1024,  # Cohere embed-english-v3.0 dimensions
         )
+        
+        # Check if collection already has data
+        if self._initialized:
+            collection_info = get_collection_info(self.collection_name)
+            if collection_info and collection_info.get('points_count', 0) > 0:
+                self._collection_has_data = True
+                print(f"✓ Collection '{self.collection_name}' has {collection_info['points_count']} documents - using existing data")
+            else:
+                print(f"⚠ Collection '{self.collection_name}' is empty - embeddings will be generated for new documents")
+        
         return self._initialized
+    
+    def _get_cached_embedding(self, text: str) -> Optional[list]:
+        """Get cached embedding for text if available.
+        
+        Args:
+            text: Text to get embedding for.
+            
+        Returns:
+            Cached embedding or None.
+        """
+        cache_key = hashlib.md5(text.encode()).hexdigest()
+        return self._embedding_cache.get(cache_key)
+    
+    def _cache_embedding(self, text: str, embedding: list) -> None:
+        """Cache embedding for text.
+        
+        Args:
+            text: Text that was embedded.
+            embedding: Embedding vector to cache.
+        """
+        cache_key = hashlib.md5(text.encode()).hexdigest()
+        self._embedding_cache[cache_key] = embedding
+        
+        # Keep cache size limited
+        if len(self._embedding_cache) > 100:
+            # Remove oldest entry (first inserted)
+            oldest_key = next(iter(self._embedding_cache))
+            del self._embedding_cache[oldest_key]
 
     async def query(
         self,
@@ -65,8 +107,23 @@ class RAGEngine:
             selected_text=selected_text,
         )
 
-        # Generate embedding for the query
-        query_embedding = get_embedding(enhanced_query)
+        # Check cache first to avoid unnecessary API calls
+        query_embedding = self._get_cached_embedding(enhanced_query)
+        
+        if query_embedding is None:
+            # Only call embedding API if not in cache and needed
+            if self._collection_has_data:
+                # Collection has data, generate embedding for search
+                query_embedding = get_embedding(enhanced_query)
+                self._cache_embedding(enhanced_query, query_embedding)
+                print("✓ Generated embedding for query (cached for future use)")
+            else:
+                # Collection is empty, use fallback
+                print("⚠ Collection empty - using fallback embedding")
+                from src.clients.cohere_client import simple_embedding
+                query_embedding = simple_embedding(enhanced_query)
+        else:
+            print("✓ Using cached embedding for query")
 
         # Search for relevant documents
         search_results = search_similar(
