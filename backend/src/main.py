@@ -3,11 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from src.api.routers import devices, safety, users, chat, personalization, i18n, translations
 from src.api.translation_middleware import TranslationMiddleware
-from src.database import engine
-from src.models import Base
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+# Try to initialize database, but don't fail if psycopg2 is missing
+try:
+    from src.config.database import engine
+    from src.models import Base
+    Base.metadata.create_all(bind=engine)
+    print("✓ Database initialized")
+except ImportError as e:
+    print(f"Database connection failed: {e}. Running without database.")
+except Exception as e:
+    print(f"Database setup error: {e}. Running without database.")
 
 app = FastAPI(
     title="Physical AI Edge Kit API",

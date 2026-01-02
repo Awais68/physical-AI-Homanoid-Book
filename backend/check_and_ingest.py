@@ -38,7 +38,7 @@ try:
         client.create_collection(
             collection_name=COLLECTION_NAME,
             vectors_config=models.VectorParams(
-                size=1024,  # Cohere embed-english-v3.0
+                size=768,  # Gemini text-embedding-004
                 distance=models.Distance.COSINE,
             ),
         )
