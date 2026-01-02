@@ -1,4 +1,4 @@
-"""Ingest documentation into Qdrant with Cohere embeddings."""
+"""Ingest documentation into Qdrant with Gemini embeddings."""
 import os
 import sys
 from pathlib import Path
@@ -10,7 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 # Load environment
 load_dotenv('../.env')
 
-from src.clients.cohere_client import get_embedding
+from src.clients.gemini_embedding_client import get_embedding
 from src.clients.qdrant_client import ensure_collection_exists
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
@@ -83,7 +83,7 @@ def ingest_documents():
     
     # Ensure collection exists
     print(f"🔧 Setting up collection '{collection_name}'...")
-    ensure_collection_exists(collection_name, vector_size=1024)
+    ensure_collection_exists(collection_name, vector_size=768)
     
     # Upload documents with embeddings
     print("\n📤 Generating embeddings and uploading documents...")
@@ -101,7 +101,7 @@ def ingest_documents():
             try:
                 point_id = i + idx + 1
                 
-                # Generate embedding using Cohere
+                # Generate embedding using Gemini
                 print(f"  [{point_id}/{len(docs)}] Embedding: {doc['title'][:50]}...")
                 embedding = get_embedding(doc['text'])
                 

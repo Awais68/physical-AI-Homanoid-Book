@@ -2,7 +2,7 @@
 from typing import Optional
 import uuid
 import hashlib
-from src.clients.cohere_client import get_document_embedding
+from src.clients.gemini_embedding_client import get_document_embedding
 from src.clients.qdrant_client import upsert_documents, search_similar, get_collection_info
 from src.config.settings import settings
 
@@ -32,7 +32,7 @@ class DocumentStore:
         
         # Check in cache first
         if content_hash in self._embedding_cache:
-            print(f"✓ Document already exists (cached) - skipping Cohere API call")
+            print(f"✓ Document already exists (cached) - skipping Gemini API call")
             return self._embedding_cache[content_hash]
         
         return None
