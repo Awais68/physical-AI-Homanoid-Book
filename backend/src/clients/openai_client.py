@@ -11,6 +11,7 @@ if settings.OPENAI_API_KEY:
         openai_client = OpenAI(
             api_key=settings.OPENAI_API_KEY,
             timeout=30.0,
+            # Remove proxies parameter as it's not supported in newer versions
         )
         print("✓ OpenAI client initialized")
     except Exception as e:

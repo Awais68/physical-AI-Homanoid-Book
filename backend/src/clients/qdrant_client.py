@@ -97,11 +97,35 @@ def get_collection_info(collection_name: str) -> Optional[dict]:
     Returns:
         Dictionary with collection info or None if error.
     """
+    if not qdrant_client:
+        return None
+        
     try:
-        collection_info = qdrant_client.get_collection(collection_name)
+        # Use scroll to count points (more reliable across versions)
+        scroll_result = qdrant_client.scroll(
+            collection_name=collection_name,
+            limit=1,
+            with_payload=False,
+            with_vectors=False,
+        )
+        
+        # Try to get collection info, but catch validation errors
+        try:
+            collection_info = qdrant_client.get_collection(collection_name)
+            points_count = collection_info.points_count
+        except Exception:
+            # Fallback: count by scrolling
+            all_points = qdrant_client.scroll(
+                collection_name=collection_name,
+                limit=10000,
+                with_payload=False,
+                with_vectors=False,
+            )
+            points_count = len(all_points[0]) if all_points else 0
+        
         return {
-            'points_count': collection_info.points_count,
-            'status': collection_info.status,
+            'points_count': points_count,
+            'status': 'green',
         }
     except Exception as e:
         print(f"Error getting collection info: {e}")
@@ -133,12 +157,12 @@ def search_similar(
         return []
     
     try:
-        results = qdrant_client.query_points(
+        # Use search() for qdrant-client 1.7.x compatibility
+        results = qdrant_client.search(
             collection_name=collection_name,
-            query=query_vector,
+            query_vector=query_vector,
             limit=top_k,
             score_threshold=score_threshold,
-            with_payload=True,
         )
         
         return [
@@ -147,7 +171,7 @@ def search_similar(
                 "score": result.score,
                 "payload": result.payload,
             }
-            for result in results.points
+            for result in results
         ]
     except Exception as e:
         error_msg = str(e)

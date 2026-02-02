@@ -1,0 +1,36 @@
+# Production-ready Docusaurus Dockerfile
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json yarn.lock* ./
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the site
+RUN yarn build
+
+# Production server stage
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install serve globally for serving static files
+RUN npm install -g serve
+
+# Copy built assets from builder stage
+COPY --from=builder /app/build ./build
+
+# Expose port
+EXPOSE 3000
+
+# Health check endpoint
+RUN echo '{"status":"ok"}' > ./health-check.json
+
+# Serve the built site
+CMD ["serve", "-s", "build", "-l", "3000", "--single", "--cors"]
