@@ -1,0 +1,128 @@
+version: "3.9"
+
+services:
+  # Qdrant vector database for RAG
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: physical-ai-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/readyz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network
+
+  # PostgreSQL Database for user data and authentication
+  postgres:
+    image: postgres:15-alpine
+    container_name: physical-ai-postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-edgekit_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network
+
+  # FastAPI Backend Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: physical-ai-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    environment:
+      # Core settings
+      - ENVIRONMENT=docker
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      
+      # Database
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-edgekit_db}
+      
+      # Qdrant Vector Database
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=${QDRANT_COLLECTION:-physical_ai_docs}
+      - QDRANT_API_KEY=${QDRANT_API_KEY:-}
+      
+      # LLM APIs
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - COHERE_API_KEY=${COHERE_API_KEY:-}
+      
+      # Models configuration
+      - OPENAI_CHAT_MODEL=${OPENAI_CHAT_MODEL:-gpt-4}
+      - GEMINI_CHAT_MODEL=${GEMINI_CHAT_MODEL:-gemini-pro}
+      - COHERE_MODEL=${COHERE_MODEL:-command}
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network
+
+  # Frontend Service (Docusaurus + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: physical-ai-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - REACT_APP_API_URL=/api
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network
+
+volumes:
+  postgres_data:
+    driver: local
+  qdrant_data:
+    driver: local
+
+networks:
+  physical-ai-network:
+    driver: bridge

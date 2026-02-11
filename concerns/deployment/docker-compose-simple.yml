@@ -1,0 +1,94 @@
+version: "3.8"
+
+services:
+  # Qdrant vector database
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    # Note: Removed healthcheck to avoid issues with missing curl/wget in container
+
+  # PostgreSQL Database (for user data and authentication)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-edgekit_db}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-edgekit_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Backend API Service
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      # Removed health-based dependency to avoid curl issues in qdrant
+      - qdrant
+      - postgres
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=physical_ai_docs
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - COHERE_API_KEY=${COHERE_API_KEY:-}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-edgekit_db}
+      - ENVIRONMENT=docker
+    volumes:
+      - ./backend:/app:ro
+      - /app/__pycache__
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    # Give qdrant time to start up
+    command: >
+      sh -c "sleep 30 &&
+             pip install curl &&
+             uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 2"
+
+  # Frontend Service (Docusaurus)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - BASE_URL=${BASE_URL:-http://localhost:3000}
+      - BACKEND_API_URL=${BACKEND_API_URL:-http://localhost:8000}
+      - NODE_ENV=production
+    volumes:
+      - ./frontend:/app:ro
+      - /app/node_modules
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+volumes:
+  qdrant_data:
+  postgres_data:

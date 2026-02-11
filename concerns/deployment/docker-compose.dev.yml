@@ -1,0 +1,116 @@
+version: "3.9"
+
+services:
+  # Qdrant vector database for RAG
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: physical-ai-qdrant-dev
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data_dev:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+    networks:
+      - physical-ai-network-dev
+
+  # PostgreSQL Database for development
+  postgres:
+    image: postgres:15-alpine
+    container_name: physical-ai-postgres-dev
+    environment:
+      - POSTGRES_DB=edgekit_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network-dev
+
+  # FastAPI Backend Service (Development)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: physical-ai-backend-dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=development
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/edgekit_db
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=physical_ai_docs
+      - QDRANT_API_KEY=
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - COHERE_API_KEY=${COHERE_API_KEY:-}
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    command: python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    restart: unless-stopped
+    networks:
+      - physical-ai-network-dev
+
+  # Frontend Service (Development - Docusaurus dev server)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: physical-ai-frontend-dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - REACT_APP_API_URL=/api
+      - WDS_SOCKET_HOST=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=100
+      - NODE_ENV=development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/build
+    command: npm start
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - physical-ai-network-dev
+
+volumes:
+  postgres_data_dev:
+    driver: local
+  qdrant_data_dev:
+    driver: local
+
+networks:
+  physical-ai-network-dev:
+    driver: bridge

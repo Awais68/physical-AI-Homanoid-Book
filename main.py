@@ -1,5 +1,5 @@
 def main():
-    print("Hello from hackathon!")
+    print("Hello from physical-ai-homanoid-book-main!")
 
 
 if __name__ == "__main__":

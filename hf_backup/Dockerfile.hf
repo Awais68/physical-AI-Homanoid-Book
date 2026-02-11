@@ -14,18 +14,6 @@ RUN wget https://github.com/qdrant/qdrant/releases/download/v1.7.4/qdrant-x86_64
     && mv qdrant /usr/local/bin/ \
     && rm qdrant-x86_64-unknown-linux-gnu.tar.gz
 
-
-RUN useradd -m -u 1000 user
-USER user
-ENV HOME=/home/user
-WORKDIR $HOME/app
-
-COPY --chown=user . $HOME/app
-```<grok-card data-id="7f592e" data-type="citation_card" data-plain-type="render_inline_citation" ></grok-card>
-
-### Step 5: Deploy Karo
-1. Files commit aur push karo Git se:
-
 # Copy backend code
 COPY backend/ /app/backend/
 COPY frontend/docs/ /app/frontend/docs/
