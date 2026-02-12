@@ -6,12 +6,12 @@ colorTo: pink
 sdk: docker
 pinned: false
 license: mit
-short_description: Physical AI & Humanoid Robotics RAG Chatbot
+short_description: Physical AI & Humanoid Robotics RAG API
 ---
 
-# 🤖 Humainoid Robotics — RAG Chatbot
+# 🤖 Humainoid Robotics — RAG API
 
-An intelligent chatbot for **Physical AI & Humanoid Robotics** education, powered by RAG (Retrieval-Augmented Generation).
+An intelligent **RAG-powered API** for **Physical AI & Humanoid Robotics** education, grounded in 134+ documents.
 
 ## Features
 
@@ -20,7 +20,7 @@ An intelligent chatbot for **Physical AI & Humanoid Robotics** education, powere
 - 🔍 **Semantic Search**: Qdrant vector database with Gemini text-embedding-004
 - 📚 **Source Citations**: Every answer includes relevant source documents
 - 🎓 **Educational Focus**: Specialized for K-12 and higher education contexts
-- 🟡 **Demo Fallback**: Works offline with built-in knowledge base
+- 🚀 **FastAPI**: High-performance async API with automatic documentation
 
 ## Architecture
 
@@ -28,19 +28,19 @@ An intelligent chatbot for **Physical AI & Humanoid Robotics** education, powere
 ┌──────────────────────────────────────────────┐
 │              HF Space (Docker)               │
 │                                              │
-│  ┌─────────────┐     ┌──────────────────┐   │
-│  │  Streamlit   │────▶│  FastAPI Backend  │   │
-│  │  (port 7860) │◀────│  (port 8000)     │   │
-│  └─────────────┘     └──────────────────┘   │
-│                              │               │
-│                              ▼               │
-│                     ┌────────────────┐       │
-│                     │   RAG Engine   │       │
-│                     └────────────────┘       │
-│                        │    │    │           │
-│                        ▼    ▼    ▼           │
-│                    Qdrant Gemini OpenAI      │
-│                    (Cloud) (API)  (API)      │
+│          ┌──────────────────┐                │
+│          │  FastAPI App     │                │
+│          │  (port 7860)     │                │
+│          └──────────────────┘                │
+│                  │                           │
+│                  ▼                           │
+│         ┌────────────────┐                   │
+│         │   RAG Engine   │                   │
+│         └────────────────┘                   │
+│            │    │    │                       │
+│            ▼    ▼    ▼                       │
+│        Qdrant Gemini OpenAI                  │
+│        (Cloud) (API)  (API)                  │
 └──────────────────────────────────────────────┘
 ```
 

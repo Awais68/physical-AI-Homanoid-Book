@@ -13,11 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Make start script executable
-RUN chmod +x start.sh
-
-# Expose Streamlit port (HF Spaces expects 7860)
+# Expose HF Spaces expected port
 EXPOSE 7860
 
-# Run both FastAPI backend and Streamlit frontend
-CMD ["./start.sh"]
+# Run unified FastAPI app on port 7860
+CMD ["python", "-m", "uvicorn", "app_fastapi:app", "--host", "0.0.0.0", "--port", "7860"]
