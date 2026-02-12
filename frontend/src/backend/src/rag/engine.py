@@ -1,7 +1,7 @@
 """RAG Engine - Core retrieval-augmented generation service."""
 from typing import Optional
 import hashlib
-from src.clients.gemini_embedding_client import get_embedding
+from src.clients.cohere_client import get_embedding
 from src.clients.gemini_client import chat_completion
 from src.clients.qdrant_client import search_similar, ensure_collection_exists, get_collection_info
 from src.config.settings import settings
@@ -38,7 +38,7 @@ class RAGEngine:
         
         self._initialized = ensure_collection_exists(
             self.collection_name,
-            vector_size=768,  # Gemini text-embedding-004 dimensions
+            vector_size=1024,  # Cohere embed-english-v3.0 dimensions
         )
         
         # Check if collection already has data
@@ -120,7 +120,7 @@ class RAGEngine:
             else:
                 # Collection is empty, use fallback
                 print("⚠ Collection empty - using fallback embedding")
-                from src.clients.gemini_embedding_client import simple_embedding
+                from src.clients.cohere_client import simple_embedding
                 query_embedding = simple_embedding(enhanced_query)
         else:
             print("✓ Using cached embedding for query")

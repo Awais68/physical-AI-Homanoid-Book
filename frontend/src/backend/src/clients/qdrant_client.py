@@ -157,21 +157,21 @@ def search_similar(
         return []
     
     try:
-        # Use search() for qdrant-client 1.7.x compatibility
-        results = qdrant_client.search(
+        # Use query_points() for qdrant-client 1.16.x+
+        results = qdrant_client.query_points(
             collection_name=collection_name,
-            query_vector=query_vector,
+            query=query_vector,
             limit=top_k,
             score_threshold=score_threshold,
         )
-        
+
         return [
             {
-                "id": str(result.id),
-                "score": result.score,
-                "payload": result.payload,
+                "id": str(point.id),
+                "score": point.score,
+                "payload": point.payload,
             }
-            for result in results
+            for point in results.points
         ]
     except Exception as e:
         error_msg = str(e)

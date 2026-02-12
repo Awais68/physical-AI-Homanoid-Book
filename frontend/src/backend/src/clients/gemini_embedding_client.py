@@ -7,8 +7,8 @@ from src.config.settings import settings
 # Initialize Gemini for embeddings
 if settings.GEMINI_API_KEY:
     genai.configure(api_key=settings.GEMINI_API_KEY)
-    GEMINI_EMBEDDING_MODEL = "models/text-embedding-004"
-    EMBEDDING_DIMENSION = 768
+    GEMINI_EMBEDDING_MODEL = "models/gemini-embedding-001"
+    EMBEDDING_DIMENSION = 3072
 else:
     GEMINI_EMBEDDING_MODEL = None
     EMBEDDING_DIMENSION = 768

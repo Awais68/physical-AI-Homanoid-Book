@@ -1,7 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from src.api.routers import devices, safety, users, chat, personalization, i18n, translations, text_processing
+from src.api.routers import devices, safety, users, chat, personalization, i18n, translations
+try:
+    from src.api.routers import text_processing
+except ImportError as e:
+    text_processing = None
+    print(f"⚠ text_processing router unavailable: {e}")
 from src.api.translation_middleware import TranslationMiddleware
 
 # Try to initialize database, but don't fail if psycopg2 is missing
@@ -41,7 +46,8 @@ app.include_router(chat.router, prefix="/api", tags=["chat"])
 app.include_router(personalization.router, prefix="/api", tags=["personalization"])
 app.include_router(i18n.router, prefix="/api", tags=["i18n"])
 app.include_router(translations.router, prefix="/api", tags=["translations"])
-app.include_router(text_processing.router, prefix="/api", tags=["text-processing"])
+if text_processing:
+    app.include_router(text_processing.router, prefix="/api", tags=["text-processing"])
 
 @app.get("/")
 def read_root():
