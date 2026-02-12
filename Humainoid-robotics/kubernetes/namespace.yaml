@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: humanoid-robotics
+  labels:
+    app: humanoid-robotics
+    environment: production

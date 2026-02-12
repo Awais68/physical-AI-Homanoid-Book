@@ -1,0 +1,74 @@
+---
+title: Humainoid Robotics
+emoji: 🤖
+colorFrom: blue
+colorTo: pink
+sdk: docker
+pinned: false
+license: mit
+short_description: Physical AI & Humanoid Robotics RAG Chatbot
+---
+
+# 🤖 Humainoid Robotics — RAG Chatbot
+
+An intelligent chatbot for **Physical AI & Humanoid Robotics** education, powered by RAG (Retrieval-Augmented Generation).
+
+## Features
+
+- 💬 **RAG-Powered Q&A**: Answers grounded in 134+ documents from the Physical AI & Humanoid Robotics book
+- 🧠 **AI Backends**: Gemini 2.5 Flash (primary) + OpenAI GPT-4o-mini (fallback)
+- 🔍 **Semantic Search**: Qdrant vector database with Gemini text-embedding-004
+- 📚 **Source Citations**: Every answer includes relevant source documents
+- 🎓 **Educational Focus**: Specialized for K-12 and higher education contexts
+- 🟡 **Demo Fallback**: Works offline with built-in knowledge base
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────┐
+│              HF Space (Docker)               │
+│                                              │
+│  ┌─────────────┐     ┌──────────────────┐   │
+│  │  Streamlit   │────▶│  FastAPI Backend  │   │
+│  │  (port 7860) │◀────│  (port 8000)     │   │
+│  └─────────────┘     └──────────────────┘   │
+│                              │               │
+│                              ▼               │
+│                     ┌────────────────┐       │
+│                     │   RAG Engine   │       │
+│                     └────────────────┘       │
+│                        │    │    │           │
+│                        ▼    ▼    ▼           │
+│                    Qdrant Gemini OpenAI      │
+│                    (Cloud) (API)  (API)      │
+└──────────────────────────────────────────────┘
+```
+
+## API Endpoints
+
+The FastAPI backend provides:
+
+- `POST /api/chat/message` — Send a chat message (RAG-powered)
+- `POST /api/chat/selected-text` — Query about selected text
+- `POST /api/chat/index` — Index a new document
+- `GET /api/chat/health` — RAG chatbot health check
+- `GET /health` — Backend health check
+
+## Environment Variables
+
+Set these as HF Space secrets:
+
+| Variable | Description |
+|----------|-------------|
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `OPENAI_API_KEY` | OpenAI API key (fallback) |
+| `COHERE_API_KEY` | Cohere API key (embeddings) |
+| `QDRANT_URL` | Qdrant Cloud URL |
+| `QDRANT_API_KEY` | Qdrant API key |
+| `QDRANT_COLLECTION` | Qdrant collection name |
+
+## Links
+
+- [GitHub Repository](https://github.com/Awais68/physical-AI-Homanoid-Book)
+- [Documentation Site](https://awais68.github.io/physical-AI-Homanoid-Book/)
+- [HF Space](https://huggingface.co/spaces/Awais68/Humainoid-robotics)

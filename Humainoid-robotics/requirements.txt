@@ -1,0 +1,24 @@
+# Streamlit frontend
+streamlit>=1.28.0
+requests>=2.31.0
+
+# FastAPI backend
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic>=2.5.0
+pydantic-settings>=2.0.0
+
+# AI/LLM providers
+google-generativeai>=0.8.0
+openai>=1.54.0
+cohere>=4.37
+
+# Vector database
+qdrant-client>=1.7.0
+
+# Database (optional, graceful fallback)
+sqlalchemy>=2.0.23
+
+# Utilities
+python-multipart>=0.0.6
+pyyaml>=6.0.1

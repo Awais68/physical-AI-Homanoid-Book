@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: humanoid-robotics
+  namespace: humanoid-robotics
+  labels:
+    app: humanoid-robotics
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: humanoid-robotics
+  template:
+    metadata:
+      labels:
+        app: humanoid-robotics
+    spec:
+      containers:
+      - name: humanoid-robotics
+        image: humanoid-robotics:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: QDRANT_URL
+          value: "http://qdrant-service:6333"
+        - name: QDRANT_COLLECTION
+          value: "physical_ai_docs"
+        - name: DATABASE_URL
+          value: "postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres-service:5432/$(POSTGRES_DB)"
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-api-keys
+              key: gemini-api-key
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-api-keys
+              key: openai-api-key
+        - name: ENVIRONMENT
+          value: "kubernetes"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: humanoid-robotics-service
+  namespace: humanoid-robotics
+spec:
+  selector:
+    app: humanoid-robotics
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: humanoid-robotics-ingress
+  namespace: humanoid-robotics
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+spec:
+  rules:
+  - host: humanoid-robotics.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: humanoid-robotics-service
+            port:
+              number: 8000
