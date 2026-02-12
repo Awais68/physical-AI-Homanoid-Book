@@ -84,9 +84,10 @@ const ChatInterface: React.FC = () => {
     setIsLoading(true);
 
     try {
-      // Use backend URL - hardcoded for browser compatibility
-      const API_URL = 'http://localhost:8000';
-      // const API_URL = '';
+      // Use HuggingFace Space backend URL for production, localhost for development
+      const API_URL = process.env.NODE_ENV === 'production'
+        ? 'https://awais68-humainoid-robotics.hf.space'
+        : 'http://localhost:8000';
       console.log('Sending message to:', `${API_URL}/api/chat/message`);
       console.log('Message content:', messageToSend);
 
