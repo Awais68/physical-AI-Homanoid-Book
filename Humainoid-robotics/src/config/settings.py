@@ -16,20 +16,20 @@ class Settings(BaseSettings):
     DATABASE_URL: str = os.getenv("DATABASE_URL", "postgresql://localhost:5432/edgekit")
 
     # Qdrant Vector Database
-    QDRANT_URL: str = os.getenv("QDRANT_URL", "http://localhost:6333")
-    QDRANT_API_KEY: Optional[str] = os.getenv("QDRANT_API_KEY")
-    QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "physical_ai_docs")
+    QDRANT_URL: str = os.getenv("QDRANT_URL", "http://localhost:6333").strip()
+    QDRANT_API_KEY: Optional[str] = os.getenv("QDRANT_API_KEY", "").strip() or None
+    QDRANT_COLLECTION: str = os.getenv("QDRANT_COLLECTION", "physical_ai_docs").strip()
 
     # Cohere (for embeddings - matches existing data)
-    COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "")
-    COHERE_EMBEDDING_MODEL: str = os.getenv("COHERE_EMBEDDING_MODEL", "embed-english-v3.0")
+    COHERE_API_KEY: str = os.getenv("COHERE_API_KEY", "").strip()
+    COHERE_EMBEDDING_MODEL: str = os.getenv("COHERE_EMBEDDING_MODEL", "embed-english-v3.0").strip()
 
     # Gemini (for chat completion)
-    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_CHAT_MODEL: str = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash")
+    GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "").strip()
+    GEMINI_CHAT_MODEL: str = os.getenv("GEMINI_CHAT_MODEL", "gemini-2.5-flash").strip()
 
     # OpenAI (fallback)
-    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "").strip()
     OPENAI_EMBEDDING_MODEL: str = os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
     OPENAI_CHAT_MODEL: str = os.getenv("OPENAI_CHAT_MODEL", "gpt-4o-mini")
 
