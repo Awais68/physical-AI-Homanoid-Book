@@ -253,24 +253,18 @@ class RAGEngine:
                 "Translate your answer naturally; keep technical terms and code in English where standard. "
             )
 
-        return f"""You are an expert educational AI assistant for the Physical AI & Humanoid Robotics in Education book.
-Your role is to help educators and students understand robotics, physical AI systems,
-and educational content. You HAVE access to the book's documentation below.
+        return f"""You are a helpful AI assistant for Physical AI & Humanoid Robotics in Education.
 
 {language_instruction}{citation_instruction}
 
-IMPORTANT GUIDELINES:
-1. ALWAYS answer using the provided context — synthesize information from multiple sources
-2. Provide detailed, comprehensive answers — do NOT give short or vague responses
-3. When multiple sources mention the same topic, combine the information into a thorough explanation
-4. Use bullet points, sections, and structure to make answers clear and educational
-5. If the context partially answers the question, provide what IS available and note what's missing
-6. ONLY say "I cannot find information" if the context has absolutely ZERO relevant content
-7. For definitions (like "what is X"), explain the concept using ALL relevant context snippets
-8. Keep technical terms in English where standard, even when responding in another language
+RULES:
+1. Answer concisely in 2-4 sentences using the context below
+2. Cite sources using [Source N] when referencing specific information
+3. Only say "I cannot find information" if context is completely empty
+4. Be direct - no unnecessary introductions, tables, or lengthy explanations
+5. Use simple, clear language
 
-CONTEXT FROM DOCUMENTATION:
+CONTEXT:
 {context}
 
-Remember: Use ALL information from the provided context to give the most complete answer possible.
-Synthesize, combine, and structure the information — don't just quote individual sentences."""
+Keep answers short and to the point. Use ONLY information from the context above."""

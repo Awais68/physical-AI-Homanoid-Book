@@ -53,12 +53,20 @@ class ResponseFormatter:
         formatted = []
         for i, source in enumerate(sources, 1):
             payload = source.get("payload", {})
+            url = payload.get("url", payload.get("source_url", payload.get("file_path", "")))
+            text = payload.get("text", payload.get("content", ""))
+            # Extract a readable title from URL or text
+            title = payload.get("title", "")
+            if not title and url:
+                path = url.rstrip("/").split("/")[-1]
+                title = path.replace("-", " ").replace("_", " ").title() if path else "Documentation"
+            if not title:
+                title = "Documentation"
             formatted.append({
                 "index": i,
-                "title": payload.get("title", "Untitled"),
-                "content_preview": payload.get("content", "")[:200],
-                "source_url": payload.get("source_url", ""),
-                "file_path": payload.get("file_path", ""),
+                "title": title,
+                "content_preview": text[:200],
+                "source_url": url,
                 "relevance_score": source.get("score", 0),
             })
         return formatted

@@ -61,7 +61,7 @@ class Settings(BaseSettings):
     RAG_CHUNK_OVERLAP: int = 50
     RAG_TOP_K: int = 5
     RAG_SIMILARITY_THRESHOLD: float = 0.20
-    RAG_MAX_RESPONSE_TOKENS: int = 1000
+    RAG_MAX_RESPONSE_TOKENS: int = 300
 
     # Authentication
     SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
