@@ -27,9 +27,8 @@ COPY start-hf.sh /app/
 RUN chmod +x /app/start-hf.sh
 
 # Environment variables (will be overridden by HF Secrets)
-ENV QDRANT_URL=http://localhost:6333
-ENV QDRANT_COLLECTION=rag_chatbot
 ENV PYTHONUNBUFFERED=1
+ENV HF_SPACE=true
 
 EXPOSE 7860
 
