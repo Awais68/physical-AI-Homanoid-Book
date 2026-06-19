@@ -16,13 +16,12 @@ sleep 5
 if curl -s http://localhost:6333/ > /dev/null; then
     echo "✅ Qdrant is running"
 else
-    echo "❌ Qdrant failed to start"
-    exit 1
+    echo "⚠️ Qdrant failed to start, continuing anyway..."
 fi
 
-# Check if documents need to be ingested
+# Check if documents need to be ingested (non-blocking)
 echo "📚 Checking document collection..."
-python3 backend/check_and_ingest.py
+python3 backend/check_and_ingest.py || echo "⚠️ Document check failed, continuing anyway..."
 
 # Start the FastAPI backend
 echo "🚀 Starting FastAPI backend..."
