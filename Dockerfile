@@ -16,7 +16,7 @@ RUN wget https://github.com/qdrant/qdrant/releases/download/v1.7.4/qdrant-x86_64
 
 # Copy backend code
 COPY backend/ /app/backend/
-COPY frontend/docs/ /app/frontend/docs/
+COPY docs_copy/ /app/frontend/docs/
 
 # Install Python dependencies
 COPY backend/requirements.txt /app/backend/
