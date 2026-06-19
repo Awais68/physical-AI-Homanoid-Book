@@ -3,8 +3,8 @@ import os
 import sys
 from pathlib import Path
 
-# Add backend to path
-sys.path.insert(0, str(Path(__file__).parent / "backend"))
+# Add backend/src to path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from dotenv import load_dotenv
 load_dotenv()
